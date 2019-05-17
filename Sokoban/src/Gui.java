@@ -1,6 +1,6 @@
 
 import java.awt.Graphics;
-
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -10,14 +10,22 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class Gui extends JPanel implements MouseListener{
+public class Gui extends JPanel implements MouseListener, Runnable{
 	Image background = null;
 	ArrayList <Button> buttons = null;
 	int action;
+	GuiPlayer p1 = null;
 	
 	public Gui(String background) {
+		p1= new GuiPlayer();
+		Thread t1 = new Thread(this);
+		t1.start();
+		Thread t2= new Thread(p1);
+		t2.start();
+		p1.setMuovi(true);
+		this.setFocusable(true);
 		addMouseListener(this);
-		action=0;
+		action=-1;
 		buttons = new ArrayList<Button>();
 		try {
 			this.background = ImageIO.read(new File(background));
@@ -25,6 +33,7 @@ public class Gui extends JPanel implements MouseListener{
 		catch(Exception e) {
 			System.out.println("Errore nel caricamento dell'immagine di Background");
 		}
+
 	}
 	
 	public Gui() {
@@ -43,12 +52,15 @@ public class Gui extends JPanel implements MouseListener{
 	
 	@Override
 	protected void paintComponent(Graphics g) {
+		
 		super.paintComponent(g) ;		
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+		g.drawImage(p1.imgCorrente, p1.x, p1.y, 70, 70, null);
 		for(int i=0; i<buttons.size(); i++) {
 			g.drawImage(buttons.get(i).current, buttons.get(i).x, buttons.get(i).y, null);
 			action=i;
 		}
+		
 		
 	}
 
@@ -82,12 +94,33 @@ public class Gui extends JPanel implements MouseListener{
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		if(arg0.getX() >= buttons.get(0).x && arg0.getY()>= buttons.get(0).y) {
-			buttons.get(0).setCurrent(1);
-			action=1;
-			this.repaint();
+		for (int i = 0; i < buttons.size(); i++) {
+			if(arg0.getX() >= buttons.get(i).x && arg0.getY()>= buttons.get(i).y) {
+				buttons.get(i).setCurrent(1);
+				action=i;
+				this.repaint();
+				
+				
+			}
 		}
 	}
 
+	public int getAction() {
+		return action;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while( true ) {
+			repaint();
+			try {
+				Thread.sleep(60);
+			}
+			catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 			
 }
