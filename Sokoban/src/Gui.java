@@ -1,4 +1,5 @@
 
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -15,6 +16,7 @@ public class Gui extends JPanel implements MouseListener, Runnable{
 	ArrayList <Button> buttons = null;
 	int action;
 	GuiPlayer p1 = null;
+	//Player p = null;
 	
 	public Gui(String background) {
 		p1= new GuiPlayer();
@@ -55,10 +57,9 @@ public class Gui extends JPanel implements MouseListener, Runnable{
 		
 		super.paintComponent(g) ;		
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
-		g.drawImage(p1.imgCorrente, p1.x, p1.y, 70, 70, null);
+		g.drawImage(p1.imgCorrente, p1.p.x, p1.p.y, 70, 70, null);
 		for(int i=0; i<buttons.size(); i++) {
 			g.drawImage(buttons.get(i).current, buttons.get(i).x, buttons.get(i).y, null);
-			action=i;
 		}
 		
 		
@@ -94,15 +95,25 @@ public class Gui extends JPanel implements MouseListener, Runnable{
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		for (int i = 0; i < buttons.size(); i++) {
-			if(arg0.getX() >= buttons.get(i).x && arg0.getY()>= buttons.get(i).y) {
-				buttons.get(i).setCurrent(1);
-				action=i;
+		//for (int i = 0; i < buttons.size(); i++) {
+			if(arg0.getX() >= buttons.get(0).x && arg0.getY()>= buttons.get(0).y) {
+				buttons.get(0).setCurrent(1);
+				//action=i;
 				this.repaint();
-				
+				JPanel p = this;
+				Container c = p.getParent();
+			         if (c != null) { 
+			                c.remove(p); 
+			                MapSelection x = new MapSelection("LevelSelection.jpg");
+			                c.add(x); 
+			                
+			                c.validate();
+			               
+			                
+			        } 
 				
 			}
-		}
+		
 	}
 
 	public int getAction() {

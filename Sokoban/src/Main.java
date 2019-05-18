@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 
 public class Main {
 	
+	
 	public static void main(String[] args) throws IOException {
 	    Button b1= new Button("pressed - Copia.png", "unpressed - Copia.png", 500, 500);
 		JFrame frame = new JFrame("Sokoban");
