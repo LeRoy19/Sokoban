@@ -18,6 +18,7 @@ public class PrincipalFrame extends JFrame {
 		this.setSize(dim.width, dim.height);
 		x = new JPanel();
 		x.setLayout(new BorderLayout(0,0));
+		x.setFocusable(true);
 		this.add(x);
 		x.setLayout(new BorderLayout(0,0));
 		
