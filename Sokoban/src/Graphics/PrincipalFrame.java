@@ -23,8 +23,8 @@ public class PrincipalFrame extends JFrame {
 		
 		this.setUndecorated(true);
 		this.setResizable(false);
-		this.setSize(600, 600);
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//this.setSize(600, 600);
+		//this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
