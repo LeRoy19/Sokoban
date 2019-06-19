@@ -1,5 +1,6 @@
 package Graphics;
 
+import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -44,6 +45,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 	
 	
 	public Editor() {
+		this.setLayout(new BorderLayout(0, 0));
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
 		this.setFocusable(true);
@@ -87,7 +89,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		g.drawImage(saveButton, 250, 20, null);
 		g.drawImage(homeButton, 30, 20, null);
 		g.drawImage(trashButton, 140, 20, null);
-		
+	
 		g.drawImage(staticCrates.get(actualSCrate), 150, 150, null);
 		g.drawImage(SCrateLeftArrow.getUnpressed(), SCrateLeftArrow.getX(), SCrateLeftArrow.getY(), SCrateLeftArrow.getWidth(), SCrateLeftArrow.getHeight(), null);
 		g.drawImage(SCrateRightArrow.getUnpressed(), SCrateRightArrow.getX(), SCrateRightArrow.getY(), SCrateRightArrow.getWidth(), SCrateRightArrow.getHeight(), null);

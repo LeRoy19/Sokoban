@@ -1,6 +1,7 @@
 package Graphics;
 
 
+import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -23,6 +24,7 @@ public class Gui extends JPanel implements MouseListener{
 	public GraphicsButton esc = null;
 	
 	public Gui(String background) {
+		this.setLayout(new BorderLayout(0,0));
 		this.addMouseListener(this);
 		
 		this.setFocusable(true);
