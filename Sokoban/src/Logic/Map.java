@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import Graphics.MobileCrate;
 import Graphics.StaticCrate;
@@ -45,8 +46,10 @@ public class Map {
 					}
 					else {
 						String line=bIn.readLine();
+						StringTokenizer tok = new StringTokenizer(line, " ");
 						for(int j = 0; j< columns; j++) {
-							int value = Character.getNumericValue(line.charAt(2*j));
+							String v = tok.nextToken();
+							int value = Integer.parseInt(v);
 							matrix[i-2][j] = value;
 						}	
 					}

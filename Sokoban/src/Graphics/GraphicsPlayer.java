@@ -44,7 +44,16 @@ public class GraphicsPlayer extends Player {
 	}
 
 	public Image getImgCorrente() {
-		return imgCorrente;
+		//return imgCorrente;
+	
+		if(direction == "right")
+			return right.get(0);
+		if(direction == "left")
+			return left.get(0);
+		if(direction == "up")
+			return up.get(0);
+			return down.get(0);
+		
 	}
 
 

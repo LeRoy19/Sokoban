@@ -14,12 +14,12 @@ public class Player {
 	
 	public Player() {
 		coordinate = new Coordinate();
-		direction="RIGHT";
+		direction="right";
 	}	
 	
 	public Player(int i, int j) {
 		coordinate = new Coordinate(i,j);
-		direction="RIGHT";
+		direction="right";
 		
 	}
 	

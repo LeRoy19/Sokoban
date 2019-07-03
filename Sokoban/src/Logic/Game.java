@@ -18,9 +18,10 @@ public class Game implements Runnable {
 	public Game() {
 		
 		frame = new PrincipalFrame();
-		Gui g = new Gui("ui.png");
+		Gui g = new Gui();
 		frame.setAcutalPane(g);
 		frame.setVisible(true);
+		System.out.println(frame.getSize());
 	}
 	
 	

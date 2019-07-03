@@ -231,7 +231,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		
 		if(x >= 30 && x <= 94 && y >= 20 && y <= 84) { //sono nell home button
 			PrincipalFrame f = (PrincipalFrame) this.getTopLevelAncestor();
-			Gui g = new Gui("ui.png");
+			Gui g = new Gui();
 			f.setAcutalPane(g);
 			g.requestFocusInWindow();
 		}
