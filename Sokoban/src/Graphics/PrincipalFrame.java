@@ -20,6 +20,9 @@ public class PrincipalFrame extends JFrame {
 		this.setUndecorated(true);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.actualPane = new Gui(this.getSize());
+		this.add(actualPane);
 		this.setVisible(true);
 	}
 	

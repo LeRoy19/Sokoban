@@ -1,12 +1,15 @@
 package Logic;
 
+import java.awt.Dimension;
+
 import Graphics.Level;
 
 public class GameManager {
 	private Level level = null;
 	
-	public GameManager(String playerColour) {
-		level = new Level(playerColour);
+	public GameManager(int playerColour, int map) {
+		Dimension d = new Dimension (0,0);
+		level = new Level(d, playerColour, map);
 	}
 	
 	public GameManager(Level level) {

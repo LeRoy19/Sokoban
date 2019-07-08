@@ -1,7 +1,6 @@
 package Graphics;
 
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -20,47 +19,36 @@ public class Gui extends JPanel implements MouseListener{
 	private static final long serialVersionUID = -4680955221761793446L;
 	public MyImage background = null;
 	public ArrayList<GraphicsButton> buttons= null;
-	public GraphicsButton esc = null;
+	public MyImage esc = null;
 	private Dimension d = null;
 	
-	public Gui() {
+	public Gui(Dimension d) {
 		super();
 		this.addMouseListener(this);
 		this.setFocusable(true);
 		setVisible(true);
-		d=new Dimension(1366, 768);
-		System.out.println(getWidth());
-		esc = new GraphicsButton("Buttons"+File.separator+"esc.png","Buttons"+File.separator+"esc.png", 0, 0, 50, 50);
+		this.d = d;
+		esc = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"esc.png", 0, 0, 50, 50);
 		buttons = new ArrayList<GraphicsButton>();
-		LoadImages();
-		/*try {
-			//Image x = ImageIO.read(new File("Images"+File.separator+"ui.png"));
-			//background = new MyImage(d, x, 0, 0, d.width, d.height);
-		}
-		catch (Exception e) {
-			System.out.println("Immagine della gui non trovata");
-		}*/
-		AddButton(600, 450, 190, 45, "pressed.png", "unpressed.png");
-		AddButton(600, 530, 190, 45, "pressed.png", "unpressed.png");
-		AddButton(600, 610, 190, 45, "pressed.png", "unpressed.png");
-	}
-	
-	private void LoadImages() {
-		System.out.println(getWidth()+"l");
 		try {
 			Image x = ImageIO.read(new File("Images"+File.separator+"ui.png"));
 			background = new MyImage(d, x, 0, 0, d.width, d.height);
-		}catch (Exception e) {
-			e.printStackTrace();
 		}
+		catch (Exception e) {
+			System.out.println("Immagine della gui non trovata");
+		}
+		AddButton(600, 450, 190, 45, "Images"+File.separator+"pressed.png", "Images"+File.separator+"unpressed.png");
+		AddButton(600, 530, 190, 45, "Images"+File.separator+"pressed.png", "Images"+File.separator+"unpressed.png");
+		AddButton(600, 610, 190, 45, "Images"+File.separator+"pressed.png", "Images"+File.separator+"unpressed.png");
 	}
+	
 	
 	public void AddButton(GraphicsButton b) {
 		buttons.add(b);
 	}
 	
 	public void AddButton(int x, int y, int width, int height, String pressed, String unpressed) {
-		GraphicsButton b= new GraphicsButton(pressed, unpressed, x, y, width, height);
+		GraphicsButton b= new GraphicsButton(d, pressed, unpressed, x, y, width, height);
 		buttons.add(b);
 	}
 
@@ -68,36 +56,29 @@ public class Gui extends JPanel implements MouseListener{
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(background.image, background.x, background.y, background.width, background.height, null);
+		g.drawImage(background.image, background.x, background.y, d.width, d.height, null);
 		for(int i = 0; i < buttons.size(); i++)
-			g.drawImage(buttons.get(i).getActual(),buttons.get(i).getX(),buttons.get(i).getY(), null);
-		g.drawImage(esc.getActual(),esc.getX(),esc.getY(), 50, 50, null);
+			g.drawImage(buttons.get(i).getActual(), buttons.get(i).pressed.x, buttons.get(i).pressed.y, buttons.get(i).pressed.width, buttons.get(i).pressed.height, null);
+		g.drawImage(esc.image, esc.x ,esc.y, esc.width, esc.height, null);
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
 		for (int i = 0; i < buttons.size(); i++) {
-			if(e.getX()>=buttons.get(i).getX() && e.getX()<=(buttons.get(i).getX()+buttons.get(i).getWidth())
-			&& 	e.getY()>=buttons.get(i).getY() && e.getY()<=(buttons.get(i).getY()+buttons.get(i).getHeight()))
-				buttons.get(i).setPressed(true);
+			if(x>=buttons.get(i).pressed.x && x<=(buttons.get(i).pressed.x+buttons.get(i).pressed.width)
+			&& y>=buttons.get(i).pressed.y && y<=(buttons.get(i).pressed.y+buttons.get(i).pressed.height))
+				buttons.get(i).setStatus(true);
 		}
 		
 	}
@@ -106,15 +87,15 @@ public class Gui extends JPanel implements MouseListener{
 	public void mouseReleased(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		if(x>=0 && x<=50 && y>=0 && y<=50) {
+		if(x>=esc.x && x <= esc.x + esc.width && y>=esc.y && y<=esc.y + esc.height) {
 			System.exit(0);
 		}
 		
 		int action=-1;
 		for (int i = 0; i < buttons.size(); i++) {
-			if(x>=buttons.get(i).getX() && x<=(buttons.get(i).getX()+buttons.get(i).getWidth())
-			&& y>=buttons.get(i).getY() && y<=(buttons.get(i).getY()+buttons.get(i).getHeight())) {
-				buttons.get(i).setPressed(false);
+			if(x>=buttons.get(i).pressed.x && x<=(buttons.get(i).pressed.x+buttons.get(i).pressed.width)
+					&& y>=buttons.get(i).pressed.y && y<=(buttons.get(i).pressed.y+buttons.get(i).pressed.height)) {
+				buttons.get(i).setStatus(false);
 				action=i;
 			}
 		}
@@ -123,15 +104,19 @@ public class Gui extends JPanel implements MouseListener{
 		
 		case 0:
 			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
-			PlayerSelection q = new PlayerSelection();
+			GameSelection q = new GameSelection(d);
 			k.setAcutalPane(q);
 			q.requestFocusInWindow();
 			break;
 		case 1:
+			PrincipalFrame t = (PrincipalFrame) this.getTopLevelAncestor();
+			GameSelection g = new GameSelection(d);
+			t.setAcutalPane(g);
+			g.requestFocusInWindow();
 			break;
 		case 2:
 			PrincipalFrame f = (PrincipalFrame) this.getTopLevelAncestor();
-			Editor h = new Editor();
+			Editor h = new Editor(d);
 			f.setAcutalPane(h);
 			h.requestFocusInWindow();
 			break;
@@ -140,5 +125,5 @@ public class Gui extends JPanel implements MouseListener{
 		}
 	}
 
-
+ /*cambiare il level*/
 }

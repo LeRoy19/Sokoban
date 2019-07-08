@@ -17,8 +17,25 @@ public class GraphicsPlayer extends Player {
 	private int index;
 	
 	
-	public GraphicsPlayer(String colour) {
+	public GraphicsPlayer(int col) {
 		super();
+		String colour;
+		switch(col) {
+		case 0:
+			colour = "B";
+			break;
+		case 1: 
+			colour = "Y";
+			break;
+		case 2:
+			colour = "P";
+			break;
+		case 3:
+			colour = "G";
+			break;
+			default:
+				colour = "G";
+		}
 		right = new ArrayList<Image>();
 		left = new ArrayList<Image>();
 		down = new ArrayList<Image>();

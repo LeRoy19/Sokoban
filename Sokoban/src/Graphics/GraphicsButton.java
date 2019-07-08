@@ -1,72 +1,55 @@
 package Graphics;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import Logic.Button;
 
-public class GraphicsButton extends Button{
+public class GraphicsButton{
 	
-	Image pressed, unpressed;
+	public MyImage pressed, unpressed;
+	public boolean isPressed;
 	
 	public GraphicsButton() {
 		super();
 		pressed = null;
 		unpressed = null;
+		isPressed = false;
 	}
 	
-	public GraphicsButton(String pressed, String unpressed, int x, int y, int width, int height) {
-		this.setX(x);
-		this.setY(y);
-		this.setHeight(height);
-		this.setWidth(width);
-		try {
-			this.pressed = ImageIO.read(new File("Images"+File.separator+pressed));
-			this.unpressed = ImageIO.read(new File("Images"+File.separator+unpressed));
-		}
-		catch(Exception e) {
-			System.out.println("Errore nel caricamento dell'immagine del bottone");
-		}
+	public GraphicsButton(Dimension d, String pressed, String unpressed, int x, int y, int width, int height) {
+		this.pressed = new MyImage(d, pressed, x, y, width, height);
+		this.unpressed = new MyImage(d, unpressed, x, y, width, height);
+		isPressed = false;
 	}
 	
-	public Image getPressed() {
+	public MyImage getPressed() {
 		return pressed;
 	}
 	
-	public boolean setPressed(String pressed) {
-		try {
-			this.pressed = ImageIO.read(new File("Images"+File.separator+pressed));
-		}
-		catch(Exception e) {
-			System.out.println("Errore nel caricamento dell'immagine del bottone");
-			return false;
-		}
-		return true;
+	public void setPressed(Image pressed) {
+		this.pressed.image=pressed;
 	}
 	
 	public Image getUnpressed() {
-		return unpressed;
+		return this.unpressed.image;
 	}
 	
-	public boolean setUnpressed(String unpressed) {
-		try {
-			this.unpressed = ImageIO.read(new File("Images"+File.separator+unpressed));
-		}
-		catch(Exception e) {
-			System.out.println("Errore nel caricamento dell'immagine del bottone");
-			return false;
-		}
-		return true;
+	public void setUnpressed(Image unpressed) {
+		this.unpressed.image = unpressed;
 	}
 
-	
 	public Image getActual() {
 		if(isPressed)
-			return pressed;
+			return this.pressed.image;
 		else 
-			return unpressed;
+			return this.unpressed.image;
+	}
+	
+	public void setStatus(boolean isPressed) {
+		this.isPressed = isPressed;
 	}
 	
 

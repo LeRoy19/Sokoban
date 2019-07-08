@@ -1,5 +1,6 @@
 package Graphics;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -19,32 +20,34 @@ public class Level extends JPanel implements KeyListener {
 	public Map map = null;
 	public GraphicsPlayer player = null;
 	private GameManager gameManager = null;
-	Image background = null;
-	Image grass = null;
-	ArrayList<Image> targets = null;
-	ArrayList<Image> mobileCrates = null;
-	ArrayList<Image> staticCrates = null;
-	ArrayList<Image> fullTarget = null;
+	MyImage background = null;
+	MyImage grass = null;
+	ArrayList<MyImage> targets = null;
+	ArrayList<MyImage> mobileCrates = null;
+	ArrayList<MyImage> staticCrates = null;
+	ArrayList<MyImage> fullTarget = null;
+	Dimension d = null;
 	
 	
-	public Level(String playerColour) {
-		
-		fullTarget = new ArrayList<Image>();
-		targets = new ArrayList<Image>();
-		mobileCrates = new ArrayList<Image>();
-		staticCrates = new ArrayList<Image>();
+	public Level(Dimension d, int playerColour, int map) {
+		this.d = d;
+		fullTarget = new ArrayList<MyImage>();
+		targets = new ArrayList<MyImage>();
+		mobileCrates = new ArrayList<MyImage>();
+		staticCrates = new ArrayList<MyImage>();
 		this.addKeyListener(this);
 		this.setFocusable(true);
-		map = new Map("mapx.txt");
+		this.map = new Map("map"+map+".txt");  //letture da mappe
 		player = new GraphicsPlayer(playerColour);
 		gameManager = new GameManager(this);
 		try {
-			background = ImageIO.read(new File("Images"+File.separator+"background.jpg"));
-			grass = ImageIO.read(new File("Images"+File.separator+"grass.png")); 
+			background = new MyImage(d, "Images"+File.separator+"background.jpg", 0, 0, d.width, d.height);
+			grass = new MyImage(d, "Images"+File.separator+"grass.png", 0, 0, 64, 64); 
 			for(int i = 1; i <= 15; i++) {
-				Image t = ImageIO.read(new File("Images"+File.separator+"Components" + File.separator+i+".png"));
+				MyImage t = new MyImage(d, "Images"+File.separator+"Components" + File.separator+i+".png", 0, 0, 64, 64);
 				if(i<=5) {
-					Image x = ImageIO.read(new File("Images"+File.separator+"Components" + File.separator+"e"+i+".png"));
+					//buchi pieni
+					MyImage x = new MyImage(d, "Images"+File.separator+"Components" + File.separator+"e"+i+".png", 0, 0, 64, 64);
 					fullTarget.add(x);
 					mobileCrates.add(t);
 				}
@@ -63,82 +66,84 @@ public class Level extends JPanel implements KeyListener {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(background, 0, 0, getWidth(), getHeight(),null);
-		g.drawImage(staticCrates.get(0), 0, 0, null);
+		g.drawImage(background.image, 0, 0, getWidth(), getHeight(),null);
+		//la larghezza e l'altezza di un qualsiasi componente
+		int w = grass.width;
+		int h = grass.height;
+		int x = (int) (242*grass.scalex);
+		int y = (int) (65*grass.scaley);
 		for(int i = 0; i < map.rows; i++) {
 			for (int j = 0; j < map.columns; j++) {
-				g.drawImage(grass, j*64, i*64, null);	
+				g.drawImage(grass.image, x+j*w, y+i*h, w, h, null);	
 				switch(map.matrix[i][j]) {
 				case 1:
-					g.drawImage(fullTarget.get(0), j*64, i*64, null);
+					g.drawImage(fullTarget.get(0).image, x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 2:
-					g.drawImage(fullTarget.get(1), j*64, i*64, null);
+					g.drawImage(fullTarget.get(1).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 3:
-					g.drawImage(fullTarget.get(2), j*64, i*64, null);
+					g.drawImage(fullTarget.get(2).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 4:
-					g.drawImage(fullTarget.get(3), j*64, i*64, null);
+					g.drawImage(fullTarget.get(3).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 5:
-					g.drawImage(fullTarget.get(4), j*64, i*64, null);
+					g.drawImage(fullTarget.get(4).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 10:
-					g.drawImage(mobileCrates.get(0), j*64, i*64, null);
+					g.drawImage(mobileCrates.get(0).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 11:
-					g.drawImage(mobileCrates.get(1), j*64, i*64, null);
+					g.drawImage(mobileCrates.get(1).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 12:
-					g.drawImage(mobileCrates.get(2), j*64, i*64, null);
+					g.drawImage(mobileCrates.get(2).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 13:
-					g.drawImage(mobileCrates.get(3), j*64, i*64, null);
+					g.drawImage(mobileCrates.get(3).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 14:
-					g.drawImage(mobileCrates.get(4), j*64, i*64, null);
+					g.drawImage(mobileCrates.get(4).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 20:
-					g.drawImage(staticCrates.get(0), j*64, i*64, null);
+					g.drawImage(staticCrates.get(0).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 21:
-					g.drawImage(staticCrates.get(1), j*64, i*64, null);
+					g.drawImage(staticCrates.get(1).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 22:
-					g.drawImage(staticCrates.get(2), j*64, i*64, null);
+					g.drawImage(staticCrates.get(2).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 23:
-					g.drawImage(staticCrates.get(3), j*64, i*64, null);
+					g.drawImage(staticCrates.get(3).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case 24:
-					g.drawImage(staticCrates.get(4), j*64, i*64, null);
+					g.drawImage(staticCrates.get(4).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case -10:
-					g.drawImage(targets.get(0), j*64, i*64, null);
+					g.drawImage(targets.get(0).image,x+ j*w,y+ i*h, w, h,null);
 					break;
 				case -11:
-					g.drawImage(targets.get(1), j*64, i*64, null);
+					g.drawImage(targets.get(1).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case -12:
-					g.drawImage(targets.get(2), j*64, i*64, null);
+					g.drawImage(targets.get(2).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case -13:
-					g.drawImage(targets.get(3), j*64, i*64, null);
+					g.drawImage(targets.get(3).image,x+ j*w,y+ i*h, w, h, null);
 					break;
 				case -14:
-					g.drawImage(targets.get(4), j*64, i*64, null);
+					g.drawImage(targets.get(4).image,x+ j*w,y+ i*h, w, h, null);
 					break;
-				
 				}
 				
 
 			}
 		}
 		
-		
 		//disegno il player
-		g.drawImage(player.getImgCorrente(), map.player.getX(), map.player.getY(), null);
+		g.drawImage(player.getImgCorrente(),x+(int) (map.player.getX()*grass.scalex) ,y+(int) (map.player.getY()*grass.scaley), w, h, null);
 		
 }
 		
@@ -154,30 +159,22 @@ public class Level extends JPanel implements KeyListener {
 		
 		if(event==KeyEvent.VK_LEFT) {
 			gameManager.goLeft();
-			repaint();
 		}
 		
 		if(event==KeyEvent.VK_UP) {
 			gameManager.goUp();
-			repaint();
 		}
 		
 		if(event==KeyEvent.VK_DOWN) {
 			gameManager.goDown();
-			repaint();
 		}
 		
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		
-	}
+	public void keyReleased(KeyEvent arg0) {}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
+	public void keyTyped(KeyEvent arg0) {}
 
 }
