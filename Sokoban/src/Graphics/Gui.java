@@ -37,9 +37,9 @@ public class Gui extends JPanel implements MouseListener{
 		catch (Exception e) {
 			System.out.println("Immagine della gui non trovata");
 		}
-		AddButton(600, 450, 190, 45, "Images"+File.separator+"pressed.png", "Images"+File.separator+"unpressed.png");
+		AddButton(600, 450, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"PlayP.png", "Images"+File.separator+"Buttons"+File.separator+"PlayU.png");
 		AddButton(600, 530, 190, 45, "Images"+File.separator+"pressed.png", "Images"+File.separator+"unpressed.png");
-		AddButton(600, 610, 190, 45, "Images"+File.separator+"pressed.png", "Images"+File.separator+"unpressed.png");
+		AddButton(600, 610, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"EditorP.png", "Images"+File.separator+"Buttons"+File.separator+"EditorU.png");
 	}
 	
 	

@@ -6,16 +6,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import Graphics.MobileCrate;
-import Graphics.StaticCrate;
-import Graphics.Target;
+
 
 public class Map {
 	
 	public int rows, columns;
 	public int matrix[][] = null;
-	public ArrayList<StaticCrate> staticCrates = null;
-	public ArrayList<MobileCrate> mobileCrates = null;
 	public ArrayList<Target> targets = null;
 	public Player player = null;
 	
@@ -23,8 +19,6 @@ public class Map {
 		rows = 10;
 		columns = rows;
 		matrix = new int[rows][columns];
-		staticCrates = new ArrayList<StaticCrate>();
-		mobileCrates = new ArrayList<MobileCrate>();
 		targets = new ArrayList<Target>();
 		player = new Player();
 	}
@@ -32,6 +26,7 @@ public class Map {
 	//carico mappa da file
 	public Map(String file) {
 		int i = 0;
+		targets = new ArrayList<Target>();
 			try {
 				BufferedReader bIn = new BufferedReader(new FileReader(file));
 				while(bIn.ready()) {
@@ -51,6 +46,9 @@ public class Map {
 							String v = tok.nextToken();
 							int value = Integer.parseInt(v);
 							matrix[i-2][j] = value;
+							if(value < 0) { //è un target
+								targets.add(new Target(i-2 , j, value));
+							}
 						}	
 					}
 					i++;
@@ -60,10 +58,8 @@ public class Map {
 			catch(IOException e) {
 				e.printStackTrace();
 			}
+		
 			
-			staticCrates = new ArrayList<StaticCrate>();
-			mobileCrates = new ArrayList<MobileCrate>();
-			targets = new ArrayList<Target>();
 			player = new Player();
 			
 	}
@@ -74,8 +70,6 @@ public class Map {
 		this.rows = rows;
 		this.columns = columns;
 		matrix = new int [rows][columns];
-		staticCrates = new ArrayList<StaticCrate>();
-		mobileCrates = new ArrayList<MobileCrate>();
 		targets = new ArrayList<Target>();
 		player = new Player();
 	}
@@ -88,19 +82,15 @@ public class Map {
 		matrix[i][j] = x;
 	}
 	
-	void addMCrate(MobileCrate x, Target y) {
-		matrix[x.coordinate.i][x.coordinate.j]+=x.getValue();
-		mobileCrates.add(x);
-		matrix[y.coordinate.i][y.coordinate.j]+=y.getValue();
-		targets.add(y);
-	}
 	
-	void addSCrate(StaticCrate x) {
-		matrix[x.coordinate.i][x.coordinate.j]+=x.getValue();
-		staticCrates.add(x);
-	}
 	
-
+	public boolean isComplete() {
+		for(int i = 0; i < targets.size(); i++) {
+			if(targets.get(i).getActualValue() < 0)
+				return false;
+		}
+		return true;
+	}
 	
 	
 	

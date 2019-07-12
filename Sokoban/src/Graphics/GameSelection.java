@@ -33,7 +33,6 @@ public class GameSelection extends JPanel {
 		playerColourPane = new ColourSelection(d);
 		
 		mapSelection = new LevelSelection(d);
-		mapSelection.setLayout(new FlowLayout());
 		split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, playerColourPane, mapSelection);
 		split.setDividerLocation(300);
 		split.setDividerSize(0);

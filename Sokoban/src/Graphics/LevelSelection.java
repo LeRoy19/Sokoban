@@ -34,7 +34,7 @@ public class LevelSelection extends JPanel implements MouseListener{
     	this.setFocusable(true);
     	this.d = d;
     	this.setOpaque(false);
-    	this.setLayout(new FlowLayout(0, 20, 20));
+    	this.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
     	maps = new ArrayList<JLabel>();
 		try {
 			BufferedReader bIn = new BufferedReader(new FileReader("NumMaps.txt"));
@@ -47,7 +47,7 @@ public class LevelSelection extends JPanel implements MouseListener{
 		for(int i = 0; i < mapNumbers; i++) {
 			Image image = null;
 			try {
-				image = ImageIO.read(new File("Images"+File.separator+"LeftArrow.png"));
+				image = ImageIO.read(new File("Images"+File.separator+"Buttons"+File.separator+"Map"+(i+1)+"U.png"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -59,7 +59,6 @@ public class LevelSelection extends JPanel implements MouseListener{
 			this.add(label);
 		}
 		
-		/* aggiungere tanti bottoni quante sono le mappe nel file txt */
 	}
 
 
@@ -80,7 +79,24 @@ public class LevelSelection extends JPanel implements MouseListener{
 
 
 	@Override
-	public void mousePressed(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		
+		for (int i = 0; i<maps.size(); i++) {
+			if(x >= maps.get(i).getX() && x <= maps.get(i).getWidth() + maps.get(i).getX() &&  y >= maps.get(i).getY() && y <= maps.get(i).getY() + maps.get(i).getHeight()) {
+				Image image = null;
+				try {
+					image = ImageIO.read(new File("Images"+File.separator+"Buttons"+File.separator+"Map"+(i+1)+"P.png"));
+				} catch (IOException r) {
+					r.printStackTrace();
+				}
+				
+				ImageIcon img = new ImageIcon(image);
+				maps.get(i).setIcon(img);
+			}	
+		}
+	}
 
 
 
@@ -98,7 +114,7 @@ public class LevelSelection extends JPanel implements MouseListener{
 				int colour = col.getPlayerColour();
 				
 				PrincipalFrame f = (PrincipalFrame) this.getTopLevelAncestor();
-				Level l = new Level(d, colour, map);
+				Level l = new Level(d, colour, map+1);
 				f.setAcutalPane(l);
 				l.requestFocusInWindow();
 			}
