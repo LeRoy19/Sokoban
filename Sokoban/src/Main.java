@@ -1,11 +1,4 @@
 import java.io.IOException;
-
-import javax.swing.JFrame;
-
-import Graphics.GraphicsPlayer;
-import Graphics.Gui;
-import Graphics.Level;
-import Graphics.PrincipalFrame;
 import Logic.Game;
 
 

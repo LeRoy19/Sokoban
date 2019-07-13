@@ -2,17 +2,16 @@ package Graphics;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import Logic.GameManager;
 import Logic.Map;
+import Sound.SoundEffects;
 
 public class Level extends JPanel implements KeyListener {
 
@@ -28,6 +27,7 @@ public class Level extends JPanel implements KeyListener {
 	ArrayList<MyImage> fullTarget = null;
 	Dimension d = null;
 	MyImage victory = null;
+	SoundEffects steps = null;
 	
 	int timer=0;
 	
@@ -63,6 +63,7 @@ public class Level extends JPanel implements KeyListener {
 			System.out.println("Errore nel caricamento delle immagini del livello");
 		}
 		victory = new MyImage(d, "Images"+File.separator+"LevelCompleted (2).png", 2, 300, 1366, 154);
+		steps = new SoundEffects("Sounds"+File.separator+"steps.wav");
 	}
 	
 	
@@ -120,6 +121,7 @@ public class Level extends JPanel implements KeyListener {
 		
 		for(int i = 0; i < map.rows; i++) {
 			for (int j = 0; j < map.columns; j++) {
+				
 				switch(map.matrix[i][j]) {
 				case 10:
 					g.drawImage(mobileCrates.get(0).image,x+ j*w,y+ i*h, w, h, null);
@@ -182,25 +184,40 @@ public class Level extends JPanel implements KeyListener {
 			int event = arg0.getKeyCode();
 			if(event==KeyEvent.VK_RIGHT) {
 				gameManager.goRight();
+				steps.playSound();
 			}
 			
 			if(event==KeyEvent.VK_LEFT) {
 				gameManager.goLeft();
+				steps.playSound();
 			}
 			
 			if(event==KeyEvent.VK_UP) {
 				gameManager.goUp();
+				steps.playSound();
 			}
 			
 			if(event==KeyEvent.VK_DOWN) {
 				gameManager.goDown();
+				steps.playSound();
 			}
+			
+			
 		}
 		
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {}
+	public void keyReleased(KeyEvent event) {
+		if(event.getExtendedKeyCode()==KeyEvent.VK_ESCAPE) {
+			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
+			if(k.getActualPane() == this) {
+			GameSelection q = new GameSelection(d);
+			k.setAcutalPane(q);
+			q.requestFocusInWindow();
+			}
+		}
+	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {}

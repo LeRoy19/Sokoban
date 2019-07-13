@@ -25,8 +25,9 @@ public class MyImage{
 	}
 	
 	public MyImage(Dimension d, String im, int x, int y, int width, int height) {
+		Image img = null;
 		try {
-			image = ImageIO.read(new File(im));
+			img = ImageIO.read(new File(im));
 		} catch (Exception e) {
 			System.out.println("errore nel caricamento della MyImage");
 		}
@@ -36,6 +37,7 @@ public class MyImage{
 		this.y = (int) (y * scaley);
 		this.height = (int) (height * scaley);
 		this.width = (int) (width * scalex);
+		image = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 	}
 	
 

@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import Sound.SoundEffects;
+
 
 
 
@@ -21,6 +23,7 @@ public class Gui extends JPanel implements MouseListener{
 	public ArrayList<GraphicsButton> buttons= null;
 	public MyImage esc = null;
 	private Dimension d = null;
+	SoundEffects click = null;
 	
 	public Gui(Dimension d) {
 		super();
@@ -28,6 +31,7 @@ public class Gui extends JPanel implements MouseListener{
 		this.setFocusable(true);
 		setVisible(true);
 		this.d = d;
+		click = new SoundEffects("Sounds"+File.separator+"click1.wav");
 		esc = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"esc.png", 0, 0, 50, 50);
 		buttons = new ArrayList<GraphicsButton>();
 		try {
@@ -75,6 +79,7 @@ public class Gui extends JPanel implements MouseListener{
 	public void mousePressed(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
+		
 		for (int i = 0; i < buttons.size(); i++) {
 			if(x>=buttons.get(i).pressed.x && x<=(buttons.get(i).pressed.x+buttons.get(i).pressed.width)
 			&& y>=buttons.get(i).pressed.y && y<=(buttons.get(i).pressed.y+buttons.get(i).pressed.height))
@@ -87,21 +92,25 @@ public class Gui extends JPanel implements MouseListener{
 	public void mouseReleased(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
+		int action = -2;
 		if(x>=esc.x && x <= esc.x + esc.width && y>=esc.y && y<=esc.y + esc.height) {
-			System.exit(0);
+			click.playSound();
+			action=-1;
 		}
 		
-		int action=-1;
 		for (int i = 0; i < buttons.size(); i++) {
 			if(x>=buttons.get(i).pressed.x && x<=(buttons.get(i).pressed.x+buttons.get(i).pressed.width)
 					&& y>=buttons.get(i).pressed.y && y<=(buttons.get(i).pressed.y+buttons.get(i).pressed.height)) {
 				buttons.get(i).setStatus(false);
 				action=i;
+				click.playSound();
 			}
 		}
 		
 		switch(action) {
-		
+		case -1:
+			System.exit(0);
+			break;
 		case 0:
 			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
 			GameSelection q = new GameSelection(d);

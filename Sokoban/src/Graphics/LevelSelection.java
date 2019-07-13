@@ -13,20 +13,23 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+
+import Sound.SoundEffects;
 
 
 public class LevelSelection extends JPanel implements MouseListener{
 
 	private static final long serialVersionUID = -4453938973046062048L;
 	public ArrayList<JLabel> maps = null;
-	@SuppressWarnings("unused")
 	private Dimension d = null;
 	int mapNumbers = 0;
 	int map = 0;
+	SoundEffects click = null;
+	
+	
     public LevelSelection(Dimension d) {
     	super();
     	this.addMouseListener(this);
@@ -35,6 +38,7 @@ public class LevelSelection extends JPanel implements MouseListener{
     	this.d = d;
     	this.setOpaque(false);
     	this.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
+    	click = new SoundEffects("Sounds"+File.separator+"click1.wav");
     	maps = new ArrayList<JLabel>();
 		try {
 			BufferedReader bIn = new BufferedReader(new FileReader("NumMaps.txt"));
@@ -45,14 +49,11 @@ public class LevelSelection extends JPanel implements MouseListener{
 		}
 		
 		for(int i = 0; i < mapNumbers; i++) {
-			Image image = null;
-			try {
-				image = ImageIO.read(new File("Images"+File.separator+"Buttons"+File.separator+"Map"+(i+1)+"U.png"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			MyImage image = null;
+			image = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"Map"+(i+1)+"U.png",0,0,49,49);
 			
-			ImageIcon img = new ImageIcon(image);
+			
+			ImageIcon img = new ImageIcon(image.image);
 			JLabel label = new JLabel(img);
 			
 			maps.add(label);
@@ -107,7 +108,7 @@ public class LevelSelection extends JPanel implements MouseListener{
 		
 		for (int i = 0; i<maps.size(); i++) {
 			if(x >= maps.get(i).getX() && x <= maps.get(i).getWidth() + maps.get(i).getX() &&  y >= maps.get(i).getY() && y <= maps.get(i).getY() + maps.get(i).getHeight()) {
-				
+				click.playSound();
 				map = i;
 				JSplitPane split = (JSplitPane) (this.getParent());
 				ColourSelection col = (ColourSelection) split.getTopComponent();

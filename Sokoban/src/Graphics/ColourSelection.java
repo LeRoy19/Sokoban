@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import Sound.SoundEffects;
+
 public class ColourSelection extends JPanel implements MouseListener {
 
 	private static final long serialVersionUID = -3858296845991617406L;
@@ -21,18 +23,21 @@ public class ColourSelection extends JPanel implements MouseListener {
 	private int currentPlayer = 0;
 	@SuppressWarnings("unused")
 	private Dimension d = null;
+	SoundEffects click = null;
+	
 	
 	public ColourSelection(Dimension d) {
 		addMouseListener(this);
 		setFocusable(true);
 		this.d=d;
 		this.setOpaque(false);
+		click = new SoundEffects("Sounds"+File.separator+"click1.wav");
 		players = new ArrayList<MyImage>();
 		this.setFocusable(true);
 		currentPlayer = 0;
 		try {
 			for (int i = 0; i < 4; i++) {
-				players.add(new MyImage(d, "Images"+File.separator+"Players"+File.separator+i+".png", 650, 96, 64, 64));
+				players.add(new MyImage(d, "Images"+File.separator+"Players"+File.separator+i+".png", 640, 85, 90, 90));
 			}
 			leftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 550, 120, 39, 31);
 			rightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 780, 120, 39, 31);
@@ -80,6 +85,7 @@ public class ColourSelection extends JPanel implements MouseListener {
 				&& y >= rightArrow.y && y <= rightArrow.y + rightArrow.height) {
 			SwitchPlayer(false);
 			repaint();
+			click.playSound();
 		
 		}
 		
@@ -87,6 +93,7 @@ public class ColourSelection extends JPanel implements MouseListener {
 				&& y >= leftArrow.y && y <= leftArrow.y + leftArrow.height) {
 			SwitchPlayer(true);
 			repaint();
+			click.playSound();
 		}
 	}
 	

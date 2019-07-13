@@ -1,21 +1,17 @@
 package Graphics;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-public class GameSelection extends JPanel {
+public class GameSelection extends JPanel implements KeyListener{
 
-	
-	
 	private static final long serialVersionUID = 8346368215230200184L;
 	public MyImage background = null;
 	private Dimension d = null;
@@ -41,6 +37,7 @@ public class GameSelection extends JPanel {
 		this.add(split, BorderLayout.CENTER);
 		this.setVisible(true);
 		this.setFocusable(true);
+		this.addKeyListener(this);
 	}
 	
 	@Override
@@ -48,6 +45,25 @@ public class GameSelection extends JPanel {
 		super.paintComponent(g);
 		g.drawImage(background.image, 0, 0, getWidth(), getHeight(), null);
 	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_ESCAPE) {
+			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
+			if(k.getActualPane() == this) {
+			Gui q = new Gui(d);
+			k.setAcutalPane(q);
+			q.requestFocusInWindow();
+			}
+		}
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
 	
 	
 }
