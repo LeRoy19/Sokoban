@@ -28,12 +28,16 @@ public class Level extends JPanel implements KeyListener {
 	Dimension d = null;
 	MyImage victory = null;
 	SoundEffects steps = null;
+	boolean classicMode;
+	
+	ArrayList<MyImage> stepsImages = null;
 	
 	int timer=0;
 	
 	
-	public Level(Dimension d, int playerColour, int map) {
+	public Level(Dimension d, int playerColour, int map, boolean mode) {
 		this.d = d;
+		classicMode = mode;
 		fullTarget = new ArrayList<MyImage>();
 		targets = new ArrayList<MyImage>();
 		mobileCrates = new ArrayList<MyImage>();
@@ -64,6 +68,34 @@ public class Level extends JPanel implements KeyListener {
 		}
 		victory = new MyImage(d, "Images"+File.separator+"LevelCompleted (2).png", 2, 300, 1366, 154);
 		steps = new SoundEffects("Sounds"+File.separator+"steps.wav");
+		
+		if(mode == false) {
+			stepsImages = new ArrayList<MyImage>();
+			for(int i = 0; i < 12; i++) {
+				MyImage image = null;
+				if(i == 10) {
+					image = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Passi.png", 0, 0, 150, 55);
+					stepsImages.add(image);
+				}
+				else if(i == 11) {
+					image = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Slash.png", 0, 0, 30, 55);
+					stepsImages.add(image);
+				}
+				else {
+					image = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+""+i+".png", 0, 0, 70, 55);
+					stepsImages.add(image);
+				}
+				
+			}
+		}
+	}
+	
+	public void setMode(boolean mode) {
+		this.classicMode = mode;
+	}
+	
+	public boolean getMode() {
+		return classicMode;
 	}
 	
 	
@@ -159,8 +191,43 @@ public class Level extends JPanel implements KeyListener {
 		
 		//disegno il player
 		g.drawImage(player.getImgCorrente(),x+(int) (map.player.getX()*grass.scalex) ,y+(int) (map.player.getY()*grass.scaley), w, h, null);
-		
-		
+		//disegno il numero di passi
+		 if(!classicMode){
+			float scalex = (float) (d.getWidth() / (float) 1366);
+		    float scaley = (float) (d.getHeight() / (float) 768);
+			int v = map.getSteps();
+	    	int xk = 0;
+	        while(v > 0){
+	            int k = v % 10;
+	            g.drawImage(stepsImages.get(k).image,(int) ((1300 - xk) * scalex),(int) (710 * scaley), stepsImages.get(0).width, stepsImages.get(0).height, null);
+	            v/=10;
+	            xk+=35;
+	        }
+	            g.drawImage(stepsImages.get(11).image,(int) ((1300 - xk + 20) * scalex),(int) (710 * scaley), stepsImages.get(11).width, stepsImages.get(11).height, null); //slash
+	            xk+=35;
+	        
+	        v=map.getActualSteps();
+	        if(v==0){
+	            g.drawImage(stepsImages.get(v).image,(int) ((1300 - xk) * scalex),(int) (710 * scaley) ,stepsImages.get(0).width, stepsImages.get(0).height, null );
+	            xk+=35;
+	        }
+	        
+	        else{
+	            while(v > 0){
+	                int k = v % 10;
+	                g.drawImage(stepsImages.get(k).image,(int) ((1300 - xk) * scalex),(int) (710 * scaley),stepsImages.get(0).width, stepsImages.get(0).height, null);
+	                v/=10;
+	                xk+=35;
+	            }
+	        }
+	
+	        xk+=100;
+	        g.drawImage(stepsImages.get(10).image,(int) ((1300 - xk) * scalex),(int) (710 * scaley),stepsImages.get(10).width, stepsImages.get(10).height,  null);
+	
+	
+		 }
+			
+			
 		if(map.isComplete()) {
 			g.drawImage(victory.image, victory.x, victory.y, victory.width, victory.height, null);
 			timer++;
@@ -173,7 +240,7 @@ public class Level extends JPanel implements KeyListener {
 			k.setAcutalPane(q);
 			q.requestFocusInWindow();
 		}
-}
+	}
 		
 	
 	
@@ -221,5 +288,7 @@ public class Level extends JPanel implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {}
+	
+	
 
 }

@@ -24,6 +24,11 @@ public class ColourSelection extends JPanel implements MouseListener {
 	@SuppressWarnings("unused")
 	private Dimension d = null;
 	SoundEffects click = null;
+	public MyImage classicMode = null;
+	public MyImage stepsMode = null;
+	public GraphicsButton cModeCheckBox = null;
+	public GraphicsButton sModeCheckBox = null;
+	public boolean mode = true;
 	
 	
 	public ColourSelection(Dimension d) {
@@ -35,15 +40,16 @@ public class ColourSelection extends JPanel implements MouseListener {
 		players = new ArrayList<MyImage>();
 		this.setFocusable(true);
 		currentPlayer = 0;
-		try {
-			for (int i = 0; i < 4; i++) {
-				players.add(new MyImage(d, "Images"+File.separator+"Players"+File.separator+i+".png", 640, 85, 90, 90));
-			}
-			leftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 550, 120, 39, 31);
-			rightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 780, 120, 39, 31);
-		} catch (Exception e) {
-			System.out.println("Errore nel caricamento delle immaggini della PlayerSelection");
+		for (int i = 0; i < 4; i++) {
+			players.add(new MyImage(d, "Images"+File.separator+"Players"+File.separator+i+".png", 240, 85, 90, 90));
 		}
+		leftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 150, 120, 39, 31);
+		rightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 380, 120, 39, 31);
+		classicMode = new MyImage(d, "Images"+File.separator+"CMode.png", 1100, 50, 200, 50);
+		stepsMode = new MyImage(d, "Images"+File.separator+"SMode.png", 1090, 100, 200, 50);
+		cModeCheckBox = new GraphicsButton(d, "Images"+File.separator+"Buttons"+File.separator+"On.png", "Images"+File.separator+"Buttons"+File.separator+"Off.png", 1060, 57, 30, 30);
+		cModeCheckBox.setStatus(true);
+		sModeCheckBox = new GraphicsButton(d, "Images"+File.separator+"Buttons"+File.separator+"On.png", "Images"+File.separator+"Buttons"+File.separator+"Off.png", 1060, 107, 30, 30);
 	}
 	
 	@Override
@@ -51,7 +57,11 @@ public class ColourSelection extends JPanel implements MouseListener {
 		super.paintComponent(g);
 		g.drawImage(players.get(currentPlayer).image, players.get(currentPlayer).x , players.get(currentPlayer).y, players.get(currentPlayer).width, players.get(currentPlayer).height, null);
 		g.drawImage(leftArrow.image, leftArrow.x, leftArrow.y, leftArrow.width, leftArrow.height, null);
-		g.drawImage(rightArrow.image, rightArrow.x, rightArrow.y, rightArrow.width, rightArrow.height, null);	
+		g.drawImage(rightArrow.image, rightArrow.x, rightArrow.y, rightArrow.width, rightArrow.height, null);
+		g.drawImage(classicMode.image, classicMode.x, classicMode.y, classicMode.width, classicMode.height, null);
+		g.drawImage(stepsMode.image, stepsMode.x, stepsMode.y, stepsMode.width, stepsMode.height, null);
+		g.drawImage(cModeCheckBox.getActual(), cModeCheckBox.getPressed().x, cModeCheckBox.getPressed().y, cModeCheckBox.getPressed().width, cModeCheckBox.getPressed().height, null);
+		g.drawImage(sModeCheckBox.getActual(), sModeCheckBox.getPressed().x, sModeCheckBox.getPressed().y, sModeCheckBox.getPressed().width, sModeCheckBox.getPressed().height, null);
 	}
 	
 	public void SwitchPlayer(boolean left) {
@@ -81,19 +91,37 @@ public class ColourSelection extends JPanel implements MouseListener {
 	public void mouseReleased(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		if(x >= rightArrow.x && x <= rightArrow.x + rightArrow.width
-				&& y >= rightArrow.y && y <= rightArrow.y + rightArrow.height) {
+		if(x >= rightArrow.x && x <= rightArrow.x + rightArrow.width && y >= rightArrow.y && y <= rightArrow.y + rightArrow.height) {
 			SwitchPlayer(false);
 			repaint();
 			click.playSound();
 		
 		}
 		
-		if(x >= leftArrow.x && x <= leftArrow.x + leftArrow.width
-				&& y >= leftArrow.y && y <= leftArrow.y + leftArrow.height) {
+		if(x >= leftArrow.x && x <= leftArrow.x + leftArrow.width && y >= leftArrow.y && y <= leftArrow.y + leftArrow.height) {
 			SwitchPlayer(true);
 			repaint();
 			click.playSound();
+		}
+		
+		if(x >= cModeCheckBox.getPressed().x && x <= cModeCheckBox.getPressed().x + cModeCheckBox.getPressed().width &&
+				y >= cModeCheckBox.getPressed().y && y <= cModeCheckBox.getPressed().y +  cModeCheckBox.getPressed().height) {
+			click.playSound();
+			if(!cModeCheckBox.isPressed) {
+				cModeCheckBox.setStatus(!cModeCheckBox.isPressed);
+				sModeCheckBox.setStatus(!sModeCheckBox.isPressed);
+				mode = true;
+			}
+		}
+		
+		if(x >= sModeCheckBox.getPressed().x && x <= sModeCheckBox.getPressed().x + sModeCheckBox.getPressed().width &&
+				y >= sModeCheckBox.getPressed().y && y <= sModeCheckBox.getPressed().y +  sModeCheckBox.getPressed().height) {
+			click.playSound();
+			if(!sModeCheckBox.isPressed) {
+				cModeCheckBox.setStatus(!cModeCheckBox.isPressed);
+				sModeCheckBox.setStatus(!sModeCheckBox.isPressed);
+				mode = false;
+			}
 		}
 	}
 	

@@ -14,6 +14,8 @@ public class Map {
 	public int matrix[][] = null;
 	public ArrayList<Target> targets = null;
 	public Player player = null;
+	int steps;
+	int actualSteps;
 	
 	public Map() {
 		rows = 10;
@@ -21,6 +23,8 @@ public class Map {
 		matrix = new int[rows][columns];
 		targets = new ArrayList<Target>();
 		player = new Player();
+		steps = 1000;
+		actualSteps = 0;
 	}
 	
 	//carico mappa da file
@@ -39,15 +43,19 @@ public class Map {
 						columns = Integer.parseInt(line);
 						matrix = new int[rows][columns];
 					}
+					else if(i==2) {
+						String line=bIn.readLine();
+						steps = Integer.parseInt(line);
+					}
 					else {
 						String line=bIn.readLine();
 						StringTokenizer tok = new StringTokenizer(line, " ");
 						for(int j = 0; j< columns; j++) {
 							String v = tok.nextToken();
 							int value = Integer.parseInt(v);
-							matrix[i-2][j] = value;
+							matrix[i-3][j] = value;
 							if(value < 0) { //è un target
-								targets.add(new Target(i-2 , j, value));
+								targets.add(new Target(i-3 , j, value));
 							}
 						}	
 					}
@@ -89,8 +97,33 @@ public class Map {
 			if(targets.get(i).getActualValue() < 0)
 				return false;
 		}
+		if(actualSteps > steps) return false;
+		
 		return true;
 	}
+	
+	public void incrementActualSteps() {
+		actualSteps++;
+	}
+	
+	public void setActualSteps(int x) {
+		actualSteps = x;
+	}
+	
+	public int getActualSteps() {
+		return actualSteps;
+	}
+	
+	public void setSteps(int x) {
+		steps = x;
+	}
+	
+	public int getSteps() {
+		return steps;
+	}
+
+	
+	
 	
 	
 	
