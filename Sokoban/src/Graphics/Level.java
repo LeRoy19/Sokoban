@@ -236,7 +236,7 @@ public class Level extends JPanel implements KeyListener {
 		if(timer > 10) {
 			//change panel
 			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
-			GameSelection q = new GameSelection(d);
+			SinglePlayerSelection q = new SinglePlayerSelection(d);
 			k.setAcutalPane(q);
 			q.requestFocusInWindow();
 		}
@@ -279,7 +279,7 @@ public class Level extends JPanel implements KeyListener {
 		if(event.getExtendedKeyCode()==KeyEvent.VK_ESCAPE) {
 			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
 			if(k.getActualPane() == this) {
-			GameSelection q = new GameSelection(d);
+			SinglePlayerSelection q = new SinglePlayerSelection(d);
 			k.setAcutalPane(q);
 			q.requestFocusInWindow();
 			}

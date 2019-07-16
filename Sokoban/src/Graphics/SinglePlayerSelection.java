@@ -10,7 +10,7 @@ import java.io.File;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-public class GameSelection extends JPanel implements KeyListener{
+public class SinglePlayerSelection extends JPanel implements KeyListener{
 
 	private static final long serialVersionUID = 8346368215230200184L;
 	public MyImage background = null;
@@ -20,7 +20,7 @@ public class GameSelection extends JPanel implements KeyListener{
 	LevelSelection mapSelection = null;
 	
 	
-	public GameSelection(Dimension d) {
+	public SinglePlayerSelection(Dimension d) {
 		super();
 		this.setFocusable(true);
 		this.d = d;
@@ -30,13 +30,12 @@ public class GameSelection extends JPanel implements KeyListener{
 		
 		mapSelection = new LevelSelection(d);
 		split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, playerColourPane, mapSelection);
-		split.setDividerLocation(300);
+		split.setDividerLocation((int)(400*background.scaley));
 		split.setDividerSize(0);
 		split.setOpaque(false);
 		mapSelection.setOpaque(false);
 		this.add(split, BorderLayout.CENTER);
 		this.setVisible(true);
-		this.setFocusable(true);
 		this.addKeyListener(this);
 	}
 	
