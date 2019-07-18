@@ -35,11 +35,14 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 	MyImage targetRightArrow = null;
 	MyImage stepsLeftArrow = null;
 	MyImage stepsRightArrow = null;
+	MyImage timeLeftArrow = null;
+	MyImage timeRightArrow = null;
 	ArrayList<MyImage> targets = null;
 	ArrayList<MyImage> mobileCrates = null;
 	ArrayList<MyImage> staticCrates = null;
 	ArrayList<MyImage> availableTargets = null;
 	ArrayList<MyImage> stepsNumbers = null;
+	MyImage time = null;
 	MyImage actualImage = null;
 	MyImage homeButton = null;
 	MyImage saveButton = null;
@@ -72,8 +75,11 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		MCrateRightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 244, 288, 40, 30);
 		targetLeftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 100, 408, 40, 30);
 		targetRightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 244, 408, 40, 30);
-		stepsLeftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 165, 533, 40, 30);
-		stepsRightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 315, 533, 40, 30);
+		stepsLeftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 165, 513, 40, 30);
+		stepsRightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 315, 513, 40, 30);
+		timeLeftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 165, 590, 40, 30);
+		timeRightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 315, 590, 40, 30);
+		time = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Time.png", 10, 575, 150, 55);
 		
 		click = new SoundEffects("Sounds"+File.separator+"click1.wav");
 		try {
@@ -98,7 +104,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 			saveButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"save.png", 250, 20, 64, 64);
 			homeButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"home.png", 30, 20, 64, 64);
 			trashButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"trash.png", 140, 20, 64, 64);
-			steps = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Passi.png", 10, 520, 150, 55);
+			steps = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Passi.png", 10, 500, 150, 55);
 			
 		} catch (Exception e) {
 			System.out.println("Errore nel caricamento delle immagini dell'editor");
@@ -124,7 +130,10 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		g.drawImage(MCrateRightArrow.image, MCrateRightArrow.x, MCrateRightArrow.y, MCrateRightArrow.width, MCrateRightArrow.height, null);
 		g.drawImage(stepsLeftArrow.image, stepsLeftArrow.x, stepsLeftArrow.y, stepsLeftArrow.width, stepsLeftArrow.height, null);
 		g.drawImage(stepsRightArrow.image, stepsRightArrow.x, stepsRightArrow.y, stepsRightArrow.width, stepsRightArrow.height, null);
+		g.drawImage(timeLeftArrow.image, timeLeftArrow.x, timeLeftArrow.y, timeLeftArrow.width, timeLeftArrow.height, null);
+		g.drawImage(timeRightArrow.image, timeRightArrow.x, timeRightArrow.y, timeRightArrow.width, timeRightArrow.height, null);
 		g.drawImage(steps.image, steps.x, steps.y, steps.width, steps.height, null);
+		g.drawImage(time.image, time.x, time.y, time.width, time.height, null);
 		//disegno i target se disponibili dopo che ho inserito un blocco
 		if(availableTargets.size()>0) {
 			g.drawImage(availableTargets.get(actualTarget).image, availableTargets.get(actualTarget).x, availableTargets.get(actualTarget).y, availableTargets.get(actualTarget).width,  availableTargets.get(actualTarget).height, null);
@@ -206,17 +215,32 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		}
 		
 		//disegno il numero di passi attuale
-		int v = stepsNumber;
+		int v = logicEditor.steps;
     	int xk = 0;
     	if(v==0){
-            g.drawImage(stepsNumbers.get(v).image,(int) ((258 - xk) * grass.scalex),(int) (520 * grass.scaley) ,stepsNumbers.get(0).width, stepsNumbers.get(0).height, null );
+            g.drawImage(stepsNumbers.get(v).image,(int) ((258 - xk) * grass.scalex),(int) (500 * grass.scaley) ,stepsNumbers.get(0).width, stepsNumbers.get(0).height, null );
         }
     	else {
 	        while(v > 0){
 	            int k = v % 10;
-	            g.drawImage(stepsNumbers.get(k).image,(int) ((258 - xk) * grass.scalex),(int) (520 * grass.scaley), stepsNumbers.get(0).width, stepsNumbers.get(0).height, null);
+	            g.drawImage(stepsNumbers.get(k).image,(int) ((258 - xk) * grass.scalex),(int) (500 * grass.scaley), stepsNumbers.get(0).width, stepsNumbers.get(0).height, null);
 	            v/=10;
 	            xk+=35;
+	        }
+    	}
+    	
+    	//disegno il tempo attuale
+		int time = logicEditor.time;
+    	int increment = 0;
+    	if(time==0){
+            g.drawImage(stepsNumbers.get(time).image,(int) ((258 - increment) * grass.scalex),(int) (580 * grass.scaley) ,stepsNumbers.get(0).width, stepsNumbers.get(0).height, null );
+        }
+    	else {
+	        while(time > 0){
+	            int k = time % 10;
+	            g.drawImage(stepsNumbers.get(k).image,(int) ((258 - increment) * grass.scalex),(int) (580 * grass.scaley), stepsNumbers.get(0).width, stepsNumbers.get(0).height, null);
+	            time/=10;
+	            increment+=35;
 	        }
     	}
 	}
@@ -264,13 +288,23 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		}
 		
 		if(x>=stepsLeftArrow.x && x <= stepsLeftArrow.x+stepsLeftArrow.width && y>=stepsLeftArrow.y && y <= stepsLeftArrow.y+stepsLeftArrow.height){
-			if(stepsNumber>0) {  stepsNumber--; logicEditor.steps--; }
+			if(logicEditor.steps>0) { logicEditor.steps--; }
 			
 			click.playSound();
 		}
 		
 		if(x>=stepsRightArrow.x && x <= stepsRightArrow.x+stepsRightArrow.width && y>=stepsRightArrow.y && y <= stepsRightArrow.y+stepsRightArrow.height){
-			if(stepsNumber<999) {stepsNumber++; logicEditor.steps++; }
+			if(logicEditor.steps<999) {logicEditor.steps++; }
+			click.playSound();
+		}
+		
+		if(x>=timeLeftArrow.x && x <= timeLeftArrow.x+timeLeftArrow.width && y>=timeLeftArrow.y && y <= timeLeftArrow.y+timeLeftArrow.height){
+			if(logicEditor.time>0) { logicEditor.time--; }
+			click.playSound();
+		}
+		
+		if(x>=timeRightArrow.x && x <= timeRightArrow.x+timeRightArrow.width && y>=timeRightArrow.y && y <= timeRightArrow.y+timeRightArrow.height){
+			if(logicEditor.time<999) {logicEditor.time++; }
 			click.playSound();
 		}
 		
@@ -297,7 +331,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Map saved!");
 			}
 			else {
-				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Map not saved, check targets or steps!");
+				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Map not saved, check targets, steps or time!");
 			}
 		}
 	}

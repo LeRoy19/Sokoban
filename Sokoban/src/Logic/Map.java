@@ -14,8 +14,9 @@ public class Map {
 	public int matrix[][] = null;
 	public ArrayList<Target> targets = null;
 	public Player player = null;
-	int steps;
-	int actualSteps;
+	public int steps, actualSteps, totalTime;
+	public int mode;
+	public Timer time = null;
 	
 	public Map() {
 		rows = 10;
@@ -25,11 +26,14 @@ public class Map {
 		player = new Player();
 		steps = 1000;
 		actualSteps = 0;
+		totalTime = 100;
+		mode = 0;
 	}
 	
 	//carico mappa da file
-	public Map(String file) {
+	public Map(String file, int mode) {
 		int i = 0;
+		this.mode = mode;
 		targets = new ArrayList<Target>();
 			try {
 				BufferedReader bIn = new BufferedReader(new FileReader(file));
@@ -47,15 +51,19 @@ public class Map {
 						String line=bIn.readLine();
 						steps = Integer.parseInt(line);
 					}
+					else if(i==3) {
+						String line=bIn.readLine();
+						totalTime = Integer.parseInt(line);
+					}
 					else {
 						String line=bIn.readLine();
 						StringTokenizer tok = new StringTokenizer(line, " ");
 						for(int j = 0; j< columns; j++) {
 							String v = tok.nextToken();
 							int value = Integer.parseInt(v);
-							matrix[i-3][j] = value;
+							matrix[i-4][j] = value;
 							if(value < 0) { //è un target
-								targets.add(new Target(i-3 , j, value));
+								targets.add(new Target(i-4 , j, value));
 							}
 						}	
 					}
@@ -69,6 +77,10 @@ public class Map {
 		
 			
 			player = new Player();
+			if(mode == 2) {
+				time = new Timer();
+				new Thread(time).start();
+			}
 			
 	}
 		
@@ -97,7 +109,10 @@ public class Map {
 			if(targets.get(i).getActualValue() < 0)
 				return false;
 		}
-		if(actualSteps > steps) return false;
+		if(mode == 1)
+			if(actualSteps > steps) return false;
+		if(mode == 2)
+			if(time.getTime() > totalTime) return false;
 		
 		return true;
 	}

@@ -11,14 +11,15 @@ public class LogicEditor {
 	public int matrix [][] = null;
 	public int availableTargets = 0;
 	public int steps = 0;
+	public int time = 0;
 	
 	public LogicEditor() {
 		matrix = new int[10][14];
 	}
 	
 	public boolean SaveMap() {
-		int map = 0;
-		if(availableTargets==0 && steps>0) {
+		int map=0;
+		if(availableTargets==0 && steps>0 && time>0) {
 		try {
 			BufferedReader bIn = new BufferedReader(new FileReader("NumMaps.txt"));
 			while(bIn.ready()) {
@@ -37,6 +38,8 @@ public class LogicEditor {
 			bOut.append("14");
 			bOut.newLine();
 			bOut.append(Integer.toString(steps));
+			bOut.newLine();
+			bOut.append(Integer.toString(time));
 			bOut.newLine();
 			for (int i = 0; i < 10; i++) {
 				StringBuilder riga = new StringBuilder();
@@ -64,6 +67,8 @@ public class LogicEditor {
 			}
 		}
 		availableTargets = 0;
+		time = 0;
+		steps = 0;
 	}
 	
 }

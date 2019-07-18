@@ -37,7 +37,7 @@ public class LevelSelection extends JPanel implements MouseListener{
     	this.setFocusable(true);
     	this.d = d;
     	this.setOpaque(false);
-    	this.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
+    	this.setLayout(new FlowLayout(FlowLayout.CENTER, 60, 30));
     	click = new SoundEffects("Sounds"+File.separator+"click1.wav");
     	maps = new ArrayList<JLabel>();
 		try {
@@ -115,10 +115,9 @@ public class LevelSelection extends JPanel implements MouseListener{
 				JSplitPane split = (JSplitPane) (this.getParent());
 				ColourSelection col = (ColourSelection) split.getTopComponent();
 				int colour = col.getPlayerColour();
-				boolean mode = col.mode;
-				
+				SinglePlayerSelection pane =(SinglePlayerSelection) split.getParent();
 				PrincipalFrame f = (PrincipalFrame) this.getTopLevelAncestor();
-				Level l = new Level(d, colour, map+1, mode);
+				Level l = new Level(d, colour, map+1, pane.mode);
 				f.setAcutalPane(l);
 				l.requestFocusInWindow();
 			}

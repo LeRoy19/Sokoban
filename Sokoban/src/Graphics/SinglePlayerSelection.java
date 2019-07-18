@@ -18,19 +18,21 @@ public class SinglePlayerSelection extends JPanel implements KeyListener{
 	JSplitPane split = null;
 	ColourSelection playerColourPane = null;
 	LevelSelection mapSelection = null;
+	int mode;
 	
 	
-	public SinglePlayerSelection(Dimension d) {
+	public SinglePlayerSelection(Dimension d, int mode) {
 		super();
 		this.setFocusable(true);
 		this.d = d;
+		this.mode=mode;
 		this.setLayout(new BorderLayout());
 		background = new MyImage(d, "Images"+File.separator+"background.jpg", 0, 0, d.width, d.height);
 		playerColourPane = new ColourSelection(d);
 		
 		mapSelection = new LevelSelection(d);
 		split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, playerColourPane, mapSelection);
-		split.setDividerLocation((int)(400*background.scaley));
+		split.setDividerLocation((int)(300*background.scaley));
 		split.setDividerSize(0);
 		split.setOpaque(false);
 		mapSelection.setOpaque(false);

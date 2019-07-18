@@ -16,7 +16,7 @@ public class GameManager {
 		if(j+1 < level.map.columns) {
 			if(level.map.matrix[i][j+1]>=0 && level.map.matrix[i][j+1] < 10) { //c'è prato oppure un buco pieno
 				level.map.player.MoveRight();
-				if(!level.getMode()) {
+				if(level.getMode()==1) {
 					level.map.incrementActualSteps();
 				}
 			}
@@ -28,7 +28,7 @@ public class GameManager {
 					level.map.player.MoveRight();
 					level.map.matrix[i][j+1]-=value;
 					level.map.matrix[i][j+2]+=value;
-					if(!level.getMode()) {
+					if(level.getMode()==1) {
 						level.map.incrementActualSteps();
 					}
 				}
@@ -37,7 +37,7 @@ public class GameManager {
 					level.map.player.MoveRight();
 					level.map.matrix[i][j+1]-=value;
 					level.map.matrix[i][j+2]+=value - level.map.matrix[i][j+2];
-					if(!level.getMode()) {
+					if(level.getMode()==1) {
 						level.map.incrementActualSteps();
 					}
 				}
@@ -52,7 +52,7 @@ public class GameManager {
 					}
 					
 					level.map.matrix[i][j+2]=0;
-					if(!level.getMode()) {
+					if(level.getMode()==1) {
 						level.map.incrementActualSteps();
 					}
 				}
@@ -67,7 +67,7 @@ public class GameManager {
 		if(j-1 >= 0) {
 			if(level.map.matrix[i][j-1]>=0 && level.map.matrix[i][j-1] < 10) { //c'è prato oppure un buco pieno
 				level.map.player.MoveLeft();
-				if(!level.getMode()) {
+				if(level.getMode()==1) {
 					level.map.incrementActualSteps();
 				}
 			}
@@ -77,7 +77,7 @@ public class GameManager {
 					level.map.player.MoveLeft();
 					level.map.matrix[i][j-1]-=value;
 					level.map.matrix[i][j-2]+=value;
-					if(!level.getMode()) {
+					if(level.getMode()==1) {
 						level.map.incrementActualSteps();
 					}
 				}
@@ -85,7 +85,7 @@ public class GameManager {
 					level.map.player.MoveLeft();
 					level.map.matrix[i][j-1]-=value;
 					level.map.matrix[i][j-2]+=value - level.map.matrix[i][j-2];
-					if(!level.getMode()) {
+					if(level.getMode()==1) {
 						level.map.incrementActualSteps();
 					}
 				}
@@ -97,7 +97,7 @@ public class GameManager {
 								level.map.targets.get(k).actualValue = level.map.matrix[i][j-2]+=value + value-9;
 						}
 						level.map.matrix[i][j-2]=0;
-						if(!level.getMode()) {
+						if(level.getMode()==1) {
 							level.map.incrementActualSteps();
 						}
 					}
@@ -112,7 +112,7 @@ public class GameManager {
 		if(i-1>=0) {
 			if(level.map.matrix[i-1][j]>=0 && level.map.matrix[i-1][j] < 10) { //c'è prato oppure un buco pieno
 				level.map.player.MoveUp();
-				if(!level.getMode()) {
+				if(level.getMode()==1) {
 					level.map.incrementActualSteps();
 				}
 			}
@@ -122,7 +122,7 @@ public class GameManager {
 					level.map.player.MoveUp();
 					level.map.matrix[i-1][j]-=value;
 					level.map.matrix[i-2][j]+=value;
-					if(!level.getMode()) {
+					if(level.getMode()==1) {
 						level.map.incrementActualSteps();
 					}
 				}
@@ -130,7 +130,7 @@ public class GameManager {
 					level.map.player.MoveDown();
 					level.map.matrix[i-1][j]-=value;
 					level.map.matrix[i-2][j]+=value - level.map.matrix[i-2][j];
-					if(!level.getMode()) {
+					if(level.getMode()==1) {
 						level.map.incrementActualSteps();
 					}
 				}
@@ -142,7 +142,7 @@ public class GameManager {
 								level.map.targets.get(k).actualValue = level.map.matrix[i-2][j]+=value + value-9;
 						}
 						level.map.matrix[i-2][j]=0;
-						if(!level.getMode()) {
+						if(level.getMode()==1) {
 							level.map.incrementActualSteps();
 						}
 					}
@@ -157,7 +157,7 @@ public class GameManager {
 		if(i+1<level.map.rows) {
 			if(level.map.matrix[i+1][j]>=0 && level.map.matrix[i+1][j] < 10) { //c'è prato oppure un buco pieno
 				level.map.player.MoveDown();
-				if(!level.getMode()) {
+				if(level.getMode()==1) {
 					level.map.incrementActualSteps();
 				}
 			}
@@ -167,7 +167,7 @@ public class GameManager {
 					level.map.player.MoveDown();
 					level.map.matrix[i+1][j]-=value;
 					level.map.matrix[i+2][j]+=value;
-					if(!level.getMode()) {
+					if(level.getMode()==1) {
 						level.map.incrementActualSteps();
 					}
 				}
@@ -176,7 +176,7 @@ public class GameManager {
 					level.map.player.MoveDown();
 					level.map.matrix[i+1][j]-=value;
 					level.map.matrix[i+2][j]+=value - level.map.matrix[i+2][j];
-					if(!level.getMode()) {
+					if(level.getMode()==1) {
 						level.map.incrementActualSteps();
 					}
 					
@@ -189,7 +189,7 @@ public class GameManager {
 								level.map.targets.get(k).actualValue = level.map.matrix[i+2][j]+=value + value-9;
 						}
 						level.map.matrix[i+2][j]=0;
-						if(!level.getMode()) {
+						if(level.getMode()==1) {
 							level.map.incrementActualSteps();
 						}
 						

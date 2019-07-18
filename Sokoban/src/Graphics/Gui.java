@@ -41,9 +41,10 @@ public class Gui extends JPanel implements MouseListener{
 		catch (Exception e) {
 			System.out.println("Immagine della gui non trovata");
 		}
-		AddButton(600, 450, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"PlayP.png", "Images"+File.separator+"Buttons"+File.separator+"PlayU.png");
-		AddButton(600, 530, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"MultiplayerP.png", "Images"+File.separator+"Buttons"+File.separator+"MultiplayerU.png");
-		AddButton(600, 610, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"EditorP.png", "Images"+File.separator+"Buttons"+File.separator+"EditorU.png");
+		AddButton(600, 430, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"ClassicP.png", "Images"+File.separator+"Buttons"+File.separator+"ClassicU.png");
+		AddButton(600, 510, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"StepsP.png", "Images"+File.separator+"Buttons"+File.separator+"StepsU.png");
+		AddButton(600, 590, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"TimeP.png", "Images"+File.separator+"Buttons"+File.separator+"TimeU.png");
+		AddButton(600, 670, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"EditorP.png", "Images"+File.separator+"Buttons"+File.separator+"EditorU.png");
 	}
 	
 	
@@ -113,17 +114,23 @@ public class Gui extends JPanel implements MouseListener{
 			break;
 		case 0:
 			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
-			SinglePlayerSelection q = new SinglePlayerSelection(d);
+			SinglePlayerSelection q = new SinglePlayerSelection(d, 0);
 			k.setAcutalPane(q);
 			q.requestFocusInWindow();
 			break;
 		case 1:
 			PrincipalFrame t = (PrincipalFrame) this.getTopLevelAncestor();
-			MultiplayerSelection g = new MultiplayerSelection(d);
+			SinglePlayerSelection g = new SinglePlayerSelection(d, 1);
 			t.setAcutalPane(g);
 			g.requestFocusInWindow();
 			break;
 		case 2:
+			PrincipalFrame r = (PrincipalFrame) this.getTopLevelAncestor();
+			SinglePlayerSelection j = new SinglePlayerSelection(d, 2);
+			r.setAcutalPane(j);
+			j.requestFocusInWindow();
+			break;
+		case 3:
 			PrincipalFrame f = (PrincipalFrame) this.getTopLevelAncestor();
 			Editor h = new Editor(d);
 			f.setAcutalPane(h);
