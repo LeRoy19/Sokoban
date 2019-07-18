@@ -29,7 +29,11 @@ public class Level extends JPanel implements KeyListener {
 	MyImage victory = null;
 	SoundEffects steps = null;
 	boolean classicMode;
-	
+	boolean Key=false;
+	int movementRight=0;
+	int movementUp=0;
+	int movementDown=0;
+	int movementLeft=0;
 	ArrayList<MyImage> stepsImages = null;
 	
 	int timer=0;
@@ -103,6 +107,7 @@ public class Level extends JPanel implements KeyListener {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		Key=false;
 		g.drawImage(background.image, 0, 0, getWidth(), getHeight(),null);
 		//la larghezza e l'altezza di un qualsiasi componente
 		int w = grass.width;
@@ -249,22 +254,30 @@ public class Level extends JPanel implements KeyListener {
 	public void keyPressed(KeyEvent arg0) {
 		if(!map.isComplete()) {
 			int event = arg0.getKeyCode();
-			if(event==KeyEvent.VK_RIGHT) {
+			if(event==KeyEvent.VK_RIGHT&&!Key) {
+				Key=true;
+				player.incrementMovement("right");
 				gameManager.goRight();
 				steps.playSound();
 			}
 			
-			if(event==KeyEvent.VK_LEFT) {
+			else if(event==KeyEvent.VK_LEFT&&!Key) {
+				Key=true;
+				player.incrementMovement("left");
 				gameManager.goLeft();
 				steps.playSound();
 			}
 			
-			if(event==KeyEvent.VK_UP) {
+			else if(event==KeyEvent.VK_UP&&!Key) {
+				Key=true;
+				player.incrementMovement("up");
 				gameManager.goUp();
 				steps.playSound();
 			}
 			
-			if(event==KeyEvent.VK_DOWN) {
+			else if(event==KeyEvent.VK_DOWN&&!Key) {
+				Key=true;
+				player.incrementMovement("down");
 				gameManager.goDown();
 				steps.playSound();
 			}
@@ -284,6 +297,7 @@ public class Level extends JPanel implements KeyListener {
 			q.requestFocusInWindow();
 			}
 		}
+		if(event.getExtendedKeyCode()==KeyEvent.VK_RIGHT || event.getExtendedKeyCode()==KeyEvent.VK_LEFT || event.getExtendedKeyCode()==KeyEvent.VK_UP || event.getExtendedKeyCode()==KeyEvent.VK_DOWN) player.resetMovement();
 	}
 
 	@Override

@@ -56,6 +56,8 @@ public class LevelSelection extends JPanel implements MouseListener{
 			ImageIcon img = new ImageIcon(image.image);
 			JLabel label = new JLabel(img);
 			
+			label.setSize((int)(49*image.scalex),(int)(49*image.scaley));
+			
 			maps.add(label);
 			this.add(label);
 		}

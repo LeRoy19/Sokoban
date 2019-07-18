@@ -13,6 +13,10 @@ public class GraphicsPlayer extends Player {
 	public ArrayList<Image> left;
 	public ArrayList<Image> down;
 	public ArrayList<Image> up;
+	int movementRight=0;
+	int movementUp=0;
+	int movementDown=0;
+	int movementLeft=0;
 	Image imgCorrente;
 	private int index;
 	
@@ -64,13 +68,27 @@ public class GraphicsPlayer extends Player {
 		//return imgCorrente;
 	
 		if(direction == "right")
-			return right.get(0);
+			return right.get(movementRight);
 		if(direction == "left")
-			return left.get(0);
+			return left.get(movementLeft);
 		if(direction == "up")
-			return up.get(0);
-			return down.get(0);
+			return up.get(movementUp);
+			return down.get(movementDown);
 		
+	}
+	
+	public void resetMovement() {
+		movementRight=0;
+		movementLeft=0;
+		movementUp=0;
+		movementDown=0;
+	}
+	
+	public void incrementMovement(String direction) {
+		if(direction.equals("right")) movementRight=(movementRight+1)%right.size();
+		else if(direction.equals("left")) movementLeft=(movementLeft+1)%left.size();
+		else if(direction.equals("up")) movementUp=(movementUp+1)%up.size();
+		else if(direction.equals("down")) movementDown=(movementDown+1)%down.size();
 	}
 
 
