@@ -10,7 +10,7 @@ import java.io.File;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-public class SinglePlayerSelection extends JPanel implements KeyListener{
+public class GameSelection extends JPanel implements KeyListener{
 
 	private static final long serialVersionUID = 8346368215230200184L;
 	public MyImage background = null;
@@ -21,7 +21,7 @@ public class SinglePlayerSelection extends JPanel implements KeyListener{
 	int mode;
 	
 	
-	public SinglePlayerSelection(Dimension d, int mode) {
+	public GameSelection(Dimension d, int mode) {
 		super();
 		this.setFocusable(true);
 		this.d = d;

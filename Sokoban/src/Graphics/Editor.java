@@ -3,6 +3,8 @@ package Graphics;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -48,10 +50,12 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 	MyImage saveButton = null;
 	MyImage trashButton = null;
 	MyImage steps = null;
+	MyImage player = null;
 	int actualValue = 0;
 	boolean drag = false;
 	int mousex, mousey;
 	private Dimension d = null;
+	boolean playerPlaced= false;
 	
 	int stepsNumber = 0;
 	
@@ -62,6 +66,24 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		this.d = d;
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
+		this.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					PrincipalFrame f = (PrincipalFrame) getTopLevelAncestor();
+					Gui g = new Gui(f.getSize());
+					f.setAcutalPane(g);
+					g.requestFocusInWindow();
+				}
+						
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {}
+		});
 		this.setFocusable(true);
 		logicEditor = new LogicEditor();
 		targets = new ArrayList<MyImage>();
@@ -101,10 +123,11 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 				}
 			}
 			background = new MyImage(d, "Images"+File.separator+"Backgrounds"+File.separator+"editor.jpg", 0 , 0, d.width, d.height);
-			saveButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"save.png", 250, 20, 64, 64);
-			homeButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"home.png", 30, 20, 64, 64);
-			trashButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"trash.png", 140, 20, 64, 64);
+			saveButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"save.png", 910, 12, 45, 45);
+			homeButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"home.png", 690, 12, 45, 45);
+			trashButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"trash.png", 800, 12, 45, 45);
 			steps = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Passi.png", 10, 500, 150, 55);
+			player = new MyImage(d, "Images"+File.separator+"Player"+File.separator+"D0G.png", 155, 40, 64, 64);
 			
 		} catch (Exception e) {
 			System.out.println("Errore nel caricamento delle immagini dell'editor");
@@ -134,6 +157,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		g.drawImage(timeRightArrow.image, timeRightArrow.x, timeRightArrow.y, timeRightArrow.width, timeRightArrow.height, null);
 		g.drawImage(steps.image, steps.x, steps.y, steps.width, steps.height, null);
 		g.drawImage(time.image, time.x, time.y, time.width, time.height, null);
+		g.drawImage(player.image, player.x,player.y, player.width, player.height, null);
 		//disegno i target se disponibili dopo che ho inserito un blocco
 		if(availableTargets.size()>0) {
 			g.drawImage(availableTargets.get(actualTarget).image, availableTargets.get(actualTarget).x, availableTargets.get(actualTarget).y, availableTargets.get(actualTarget).width,  availableTargets.get(actualTarget).height, null);
@@ -203,6 +227,9 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 					break;
 				case -14:
 					g.drawImage(targets.get(4).image, x+j*w, y+i*h, w, h,null);
+					break;
+				case -100:
+					g.drawImage(player.image, x+j*w, y+i*h, w, h, null);
 					break;
 				default:
 					break;				
@@ -327,7 +354,10 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		
 		if(x >= saveButton.x && x <= saveButton.x + saveButton.width && y >= saveButton.y && y <= saveButton.y + saveButton.height) { //sono nel save button
 			click.playSound();
-			if(logicEditor.SaveMap()) {
+			if(playerPlaced==false) {
+				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Player non placed!");
+			}
+			else if(logicEditor.SaveMap()) {
 				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Map saved!");
 			}
 			else {
@@ -375,6 +405,14 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 			click.playSound();
 		}
 		
+		//ho cliccato sul player
+		if(x>=player.scalex && x<=player.x+player.width && y>=player.scaley && y<=player.y+player.height) {
+			click.playSound();
+			drag = true;
+			actualImage = player;
+			actualValue = -100;
+		}
+		
 	}
 
 
@@ -396,7 +434,11 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 							logicEditor.availableTargets++;
 						}
 						
-						if(actualValue<0) {
+						if(actualValue==-100) {
+							playerPlaced=true;
+						}
+						
+						if(actualValue<0 && actualValue!=-100) {
 							if(!availableTargets.isEmpty()) {
 								availableTargets.remove(actualTarget);
 								actualTarget=0;

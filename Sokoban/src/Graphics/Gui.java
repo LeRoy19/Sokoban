@@ -4,6 +4,8 @@ package Graphics;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -21,18 +23,29 @@ public class Gui extends JPanel implements MouseListener{
 	private static final long serialVersionUID = -4680955221761793446L;
 	public MyImage background = null;
 	public ArrayList<GraphicsButton> buttons= null;
-	public MyImage esc = null;
 	private Dimension d = null;
 	SoundEffects click = null;
 	
 	public Gui(Dimension d) {
 		super();
 		this.addMouseListener(this);
+		this.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+						System.exit(0);
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {}
+		});
 		this.setFocusable(true);
 		setVisible(true);
 		this.d = d;
 		click = new SoundEffects("Sounds"+File.separator+"click1.wav");
-		esc = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"esc.png", 0, 0, 50, 50);
 		buttons = new ArrayList<GraphicsButton>();
 		try {
 			Image x = ImageIO.read(new File("Images"+File.separator+"ui.png"));
@@ -64,7 +77,6 @@ public class Gui extends JPanel implements MouseListener{
 		g.drawImage(background.image, background.x, background.y, d.width, d.height, null);
 		for(int i = 0; i < buttons.size(); i++)
 			g.drawImage(buttons.get(i).getActual(), buttons.get(i).pressed.x, buttons.get(i).pressed.y, buttons.get(i).pressed.width, buttons.get(i).pressed.height, null);
-		g.drawImage(esc.image, esc.x ,esc.y, esc.width, esc.height, null);
 	}
 
 	@Override
@@ -94,10 +106,6 @@ public class Gui extends JPanel implements MouseListener{
 		int x = e.getX();
 		int y = e.getY();
 		int action = -2;
-		if(x>=esc.x && x <= esc.x + esc.width && y>=esc.y && y<=esc.y + esc.height) {
-			click.playSound();
-			action=-1;
-		}
 		
 		for (int i = 0; i < buttons.size(); i++) {
 			if(x>=buttons.get(i).pressed.x && x<=(buttons.get(i).pressed.x+buttons.get(i).pressed.width)
@@ -114,19 +122,19 @@ public class Gui extends JPanel implements MouseListener{
 			break;
 		case 0:
 			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
-			SinglePlayerSelection q = new SinglePlayerSelection(d, 0);
+			GameSelection q = new GameSelection(d, 0);
 			k.setAcutalPane(q);
 			q.requestFocusInWindow();
 			break;
 		case 1:
 			PrincipalFrame t = (PrincipalFrame) this.getTopLevelAncestor();
-			SinglePlayerSelection g = new SinglePlayerSelection(d, 1);
+			GameSelection g = new GameSelection(d, 1);
 			t.setAcutalPane(g);
 			g.requestFocusInWindow();
 			break;
 		case 2:
 			PrincipalFrame r = (PrincipalFrame) this.getTopLevelAncestor();
-			SinglePlayerSelection j = new SinglePlayerSelection(d, 2);
+			GameSelection j = new GameSelection(d, 2);
 			r.setAcutalPane(j);
 			j.requestFocusInWindow();
 			break;

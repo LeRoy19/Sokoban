@@ -27,6 +27,8 @@ public class Level extends JPanel implements KeyListener {
 	ArrayList<MyImage> fullTarget = null;
 	Dimension d = null;
 	MyImage victory = null;
+	MyImage stepsFinished = null;
+	MyImage timeFinished = null;
 	
 	SoundEffects steps = null;
 	int mode;
@@ -73,7 +75,9 @@ public class Level extends JPanel implements KeyListener {
 		}catch (Exception e) {
 			System.out.println("Errore nel caricamento delle immagini del livello");
 		}
-		victory = new MyImage(d, "Images"+File.separator+"LevelCompleted (2).png", 2, 300, 1366, 154);
+		victory = new MyImage(d, "Images"+File.separator+"LevelCompleted.png", 2, 300, 1366, 154);
+		stepsFinished = new MyImage(d, "Images"+File.separator+"StepsFinished.png", 2, 300, 1366, 155);
+		timeFinished = new MyImage(d, "Images"+File.separator+"TimeFinished.png", 2, 300, 1366, 155);
 		steps = new SoundEffects("Sounds"+File.separator+"steps.wav");
 		
 		if(mode == 1 || mode == 2) {
@@ -81,7 +85,7 @@ public class Level extends JPanel implements KeyListener {
 			for(int i = 0; i < 10; i++) {
 				MyImage image = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+""+i+".png", 0, 0, 70, 55);
 				numbers.add(image);
-				}
+			}
 				
 		}
 		if(mode == 1) {
@@ -123,6 +127,7 @@ public class Level extends JPanel implements KeyListener {
 		
 		//disegno i componenti
 		for(int i = 0; i < map.targets.size(); i++) {
+		
 			switch(map.targets.get(i).getActualValue()) {
 			case 1:
 				g.drawImage(fullTarget.get(0).image, x+ map.targets.get(i).getJ()*w,y+ map.targets.get(i).getI()*h, w, h, null);
@@ -262,10 +267,21 @@ public class Level extends JPanel implements KeyListener {
 			timer++;
 		}
 		
-		if(timer > 10) {
+		if(map.time!= null && map.time.getTime()>=map.totalTime) {
+			g.drawImage(timeFinished.image, timeFinished.x, timeFinished.y, timeFinished.width, timeFinished.height, null);
+			timer++;
+		}
+		
+		if(map.actualSteps>=map.steps) {
+			g.drawImage(stepsFinished.image, stepsFinished.x, stepsFinished.y, stepsFinished.width, stepsFinished.height, null);
+			timer++;
+		}
+			
+		
+		if(timer > 15) {
 			//change panel
 			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
-			SinglePlayerSelection q = new SinglePlayerSelection(d, this.mode);
+			GameSelection q = new GameSelection(d, this.mode);
 			k.setAcutalPane(q);
 			q.requestFocusInWindow();
 		}
@@ -277,9 +293,13 @@ public class Level extends JPanel implements KeyListener {
 	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if(!map.isComplete()) {
+		if(!map.isComplete() && timer == 0) {
+			
 			int event = arg0.getKeyCode();
-			if(event==KeyEvent.VK_RIGHT&&!Key) {
+			if(event==KeyEvent.VK_R) {
+				map.reset();
+			}
+			else if(event==KeyEvent.VK_RIGHT&&!Key) {
 				Key=true;
 				player.incrementMovement("right");
 				gameManager.goRight();
@@ -316,7 +336,7 @@ public class Level extends JPanel implements KeyListener {
 		if(event.getExtendedKeyCode()==KeyEvent.VK_ESCAPE) {
 			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
 			if(k.getActualPane() == this) {
-			SinglePlayerSelection q = new SinglePlayerSelection(d, this.mode);
+			GameSelection q = new GameSelection(d, this.mode);
 			k.setAcutalPane(q);
 			q.requestFocusInWindow();
 			}
