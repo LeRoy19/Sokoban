@@ -347,7 +347,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 			click.playSound();
 		}
 		
-		if(x >= undoButton.x && x <= undoButton.x + undoButton.width && y >= undoButton.y && y <= undoButton.y + undoButton.height) {//sono nell'undobutton button
+		if(undo && x >= undoButton.x && x <= undoButton.x + undoButton.width && y >= undoButton.y && y <= undoButton.y + undoButton.height) {//sono nell'undobutton button
 			click.playSound();
 			switch(logicEditor.undo()) {
 			case -1:

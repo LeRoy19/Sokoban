@@ -106,7 +106,6 @@ public class LogicEditor {
 			}
 			
 			matrix[lastEventI][lastEventJ]=0;
-		
 		return targetControl;
 	}
 	
