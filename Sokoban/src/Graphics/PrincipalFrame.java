@@ -16,7 +16,6 @@ public class PrincipalFrame extends JFrame {
 		dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setSize(dim.width, dim.height);
 		
-		
 		this.setUndecorated(true);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -1,15 +1,12 @@
 package Logic;
 
-
-import Graphics.GraphicsPlayer;
 import Graphics.PrincipalFrame;
 
-
+/*thread che ridisegna ogni tot milliseondi il pannello che è contenuto nel frame principale*/
 
 public class Game implements Runnable {
 
 	PrincipalFrame frame = null;	
-	GraphicsPlayer player1 = null;
 	
 	public Game() {
 		
@@ -23,7 +20,7 @@ public class Game implements Runnable {
 		while(true) {
 			frame.getActualPane().repaint();
 			try {
-				Thread.sleep(100);
+				Thread.sleep(80);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

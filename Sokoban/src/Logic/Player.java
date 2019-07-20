@@ -1,6 +1,8 @@
 package Logic;
 
 
+/*parte logica del giocatore*/
+
 public class Player {
 	protected Coordinate coordinate; 
 	protected String direction;
@@ -12,22 +14,16 @@ public class Player {
 		this.direction = direction;
 	}
 	
-	public Player() {
-		coordinate = new Coordinate();
-		direction="right";
-	}	
-	
 	public Player(int i, int j) {
 		coordinate = new Coordinate(i,j);
 		direction="right";
 		
 	}
 	
-	
-	
 	public String getDirection() {
 		return direction;
 	}
+	
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}

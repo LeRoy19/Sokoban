@@ -11,27 +11,25 @@ import javax.swing.JPanel;
 
 import Sound.SoundEffects;
 
+
+/*pannello per la selezione del colore del giocatore*/
+
 public class ColourSelection extends JPanel implements MouseListener {
 
 	private static final long serialVersionUID = -3858296845991617406L;
-	
-
 	
 	public ArrayList<MyImage> players = null;
 	public MyImage leftArrow = null;
 	public MyImage rightArrow = null;
 	private int currentPlayer = 0;
-	@SuppressWarnings("unused")
-	private Dimension d = null;
+	Dimension d = null;
 	SoundEffects click = null;
-
-	
 	
 	public ColourSelection(Dimension d) {
-		addMouseListener(this);
-		setFocusable(true);
-		this.d=d;
+		this.addMouseListener(this);
+		this.setFocusable(true);
 		this.setOpaque(false);
+		this.d = d;
 		click = new SoundEffects("Sounds"+File.separator+"click1.wav");
 		players = new ArrayList<MyImage>();
 		this.setFocusable(true);
@@ -42,6 +40,7 @@ public class ColourSelection extends JPanel implements MouseListener {
 		leftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 550, 120, 39, 31);
 		rightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 780, 120, 39, 31);
 	}
+	
 	
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -79,16 +78,15 @@ public class ColourSelection extends JPanel implements MouseListener {
 		int x = e.getX();
 		int y = e.getY();
 		if(x >= rightArrow.x && x <= rightArrow.x + rightArrow.width && y >= rightArrow.y && y <= rightArrow.y + rightArrow.height) {
+			click.playSound();
 			SwitchPlayer(false);
 			repaint();
-			click.playSound();
-		
 		}
 		
 		if(x >= leftArrow.x && x <= leftArrow.x + leftArrow.width && y >= leftArrow.y && y <= leftArrow.y + leftArrow.height) {
+			click.playSound();
 			SwitchPlayer(true);
 			repaint();
-			click.playSound();
 		}
 		
 	}

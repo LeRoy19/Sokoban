@@ -2,6 +2,8 @@ package Logic;
 
 import Graphics.Level;
 
+/*classe che controlla gli spostamenti del giocatore nella mappa*/
+
 public class GameManager {
 	private Level level = null;
 	

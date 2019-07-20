@@ -22,7 +22,7 @@ public class GraphicsPlayer extends Player {
 	
 	
 	public GraphicsPlayer(int col) {
-		super();
+		super(0,0);
 		String colour;
 		switch(col) {
 		case 0:

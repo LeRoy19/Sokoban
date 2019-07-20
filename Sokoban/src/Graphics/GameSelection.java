@@ -10,10 +10,12 @@ import java.io.File;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+/*pannello contenente la selezione del colore del giocatore e la selezione della mappa*/
+
 public class GameSelection extends JPanel implements KeyListener{
 
 	private static final long serialVersionUID = 8346368215230200184L;
-	public MyImage background = null;
+	MyImage background = null;
 	private Dimension d = null;
 	JSplitPane split = null;
 	ColourSelection playerColourPane = null;
@@ -27,7 +29,7 @@ public class GameSelection extends JPanel implements KeyListener{
 		this.d = d;
 		this.mode=mode;
 		this.setLayout(new BorderLayout());
-		background = new MyImage(d, "Images"+File.separator+"background.jpg", 0, 0, d.width, d.height);
+		background = new MyImage(d, "Images"+File.separator+"Backgrounds"+File.separator+"background.jpg", 0, 0, d.width, d.height);
 		playerColourPane = new ColourSelection(d);
 		
 		mapSelection = new LevelSelection(d);
@@ -48,7 +50,15 @@ public class GameSelection extends JPanel implements KeyListener{
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {}
+	public void keyPressed(KeyEvent e) {
+				if(e.getExtendedKeyCode()==KeyEvent.VK_RIGHT) {
+					playerColourPane.SwitchPlayer(false);
+				}
+				
+				if(e.getExtendedKeyCode()==KeyEvent.VK_LEFT) {
+					playerColourPane.SwitchPlayer(true);
+				}	
+	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {

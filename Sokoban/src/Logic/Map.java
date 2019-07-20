@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-
+/*matrice logica di un livello*/
 
 public class Map {
 	
@@ -15,7 +15,7 @@ public class Map {
 	private int resetMatrix[][] = null;
 	public ArrayList<Target> targets = null;
 	public Player player = null;
-	public int steps, actualSteps, totalTime;
+	public int totalSteps, actualSteps, totalTime;
 	public int mode;
 	public Timer time = null;
 	public int playerI, playerJ;
@@ -26,8 +26,8 @@ public class Map {
 		matrix = new int[rows][columns];
 		resetMatrix = new int[rows][columns];
 		targets = new ArrayList<Target>();
-		player = new Player();
-		steps = 1000;
+		player = new Player(0,0);
+		totalSteps = 1000;
 		actualSteps = 0;
 		totalTime = 100;
 		mode = 0;
@@ -55,7 +55,7 @@ public class Map {
 					}
 					else if(i==2) {
 						String line=bIn.readLine();
-						steps = Integer.parseInt(line);
+						totalSteps = Integer.parseInt(line);
 					}
 					else if(i==3) {
 						String line=bIn.readLine();
@@ -107,7 +107,7 @@ public class Map {
 		this.columns = columns;
 		matrix = new int [rows][columns];
 		targets = new ArrayList<Target>();
-		player = new Player();
+		player = new Player(0,0);
 	}
 	
 	public int get(int i, int j) {
@@ -126,7 +126,7 @@ public class Map {
 				return false;
 		}
 		if(mode == 1)
-			if(actualSteps > steps) return false;
+			if(actualSteps > totalSteps) return false;
 		if(mode == 2)
 			if(time.getTime() > totalTime) return false;
 		
@@ -146,11 +146,11 @@ public class Map {
 	}
 	
 	public void setSteps(int x) {
-		steps = x;
+		totalSteps = x;
 	}
 	
 	public int getSteps() {
-		return steps;
+		return totalSteps;
 	}
 	
 	public void reset() {

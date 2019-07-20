@@ -21,14 +21,17 @@ import javax.swing.JPanel;
 import Logic.LogicEditor;
 import Sound.SoundEffects;
 
+/*editor grafico per creare delle mappe*/
+
 public class Editor extends JPanel implements MouseMotionListener, MouseListener{
 
 	private static final long serialVersionUID = -5665825017381029407L;
 	LogicEditor logicEditor = null;
 	MyImage background = null;
-	int actualSCrate = 0;
-	int actualMcrate = 0;
-	int actualTarget = 0;
+	private int actualSCrate = 0;
+	private int actualMcrate = 0;
+	private int actualTarget = 0;
+	
 	MyImage SCrateLeftArrow = null;
 	MyImage SCrateRightArrow = null;
 	MyImage MCrateLeftArrow = null;
@@ -39,33 +42,36 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 	MyImage stepsRightArrow = null;
 	MyImage timeLeftArrow = null;
 	MyImage timeRightArrow = null;
+	
 	ArrayList<MyImage> targets = null;
 	ArrayList<MyImage> mobileCrates = null;
 	ArrayList<MyImage> staticCrates = null;
 	ArrayList<MyImage> availableTargets = null;
 	ArrayList<MyImage> stepsNumbers = null;
+	
+	MyImage grass = null;
 	MyImage time = null;
 	MyImage actualImage = null;
 	MyImage homeButton = null;
+	MyImage undoButton = null;
 	MyImage saveButton = null;
 	MyImage trashButton = null;
 	MyImage steps = null;
 	MyImage player = null;
-	int actualValue = 0;
-	boolean drag = false;
-	int mousex, mousey;
+	private int actualValue = 0;
+	private boolean drag = false;
+	private int mousex, mousey;
 	private Dimension d = null;
-	boolean playerPlaced= false;
-	
-	int stepsNumber = 0;
-	
-	
+	private boolean playerPlaced= false;
+	private boolean undo;
+
 	SoundEffects click = null;
 	
 	public Editor(Dimension d) {
 		this.d = d;
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
+		
 		this.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {}
@@ -84,6 +90,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 			@Override
 			public void keyPressed(KeyEvent e) {}
 		});
+		
 		this.setFocusable(true);
 		logicEditor = new LogicEditor();
 		targets = new ArrayList<MyImage>();
@@ -122,16 +129,20 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 					targets.add(t);
 				}
 			}
+			
 			background = new MyImage(d, "Images"+File.separator+"Backgrounds"+File.separator+"editor.jpg", 0 , 0, d.width, d.height);
-			saveButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"save.png", 910, 12, 45, 45);
-			homeButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"home.png", 690, 12, 45, 45);
-			trashButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"trash.png", 800, 12, 45, 45);
+			saveButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"save.png", 945, 12, 45, 45);
+			homeButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"home.png", 745, 12, 45, 45);
+			undoButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"undo.png", 645, 12, 48, 45);
+			trashButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"trash.png", 845, 12, 45, 45);
 			steps = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Passi.png", 10, 500, 150, 55);
 			player = new MyImage(d, "Images"+File.separator+"Player"+File.separator+"D0G.png", 155, 40, 64, 64);
+			grass = new MyImage(d, "Images"+File.separator+"Components"+File.separator+"grass.png", 0, 0, 64, 64);
 			
 		} catch (Exception e) {
 			System.out.println("Errore nel caricamento delle immagini dell'editor");
 		}
+		undo = false;
 	}
 	
 	
@@ -143,6 +154,8 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		g.drawImage(saveButton.image, saveButton.x, saveButton.y, saveButton.width, saveButton.height, null);
 		g.drawImage(homeButton.image, homeButton.x, homeButton.y, homeButton.width, homeButton.height,null);
 		g.drawImage(trashButton.image, trashButton.x, trashButton.y, trashButton.width, trashButton.height, null);
+		if(undo)
+			g.drawImage(undoButton.image, undoButton.x, undoButton.y, undoButton.width, undoButton.height, null);
 	
 		g.drawImage(staticCrates.get(actualSCrate).image, staticCrates.get(actualSCrate).x, staticCrates.get(actualSCrate).y, staticCrates.get(actualSCrate).width, staticCrates.get(actualSCrate).height, null);
 		g.drawImage(SCrateLeftArrow.image, SCrateLeftArrow.x, SCrateLeftArrow.y, SCrateLeftArrow.width, SCrateLeftArrow.height, null);
@@ -158,15 +171,13 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		g.drawImage(steps.image, steps.x, steps.y, steps.width, steps.height, null);
 		g.drawImage(time.image, time.x, time.y, time.width, time.height, null);
 		g.drawImage(player.image, player.x,player.y, player.width, player.height, null);
+		
 		//disegno i target se disponibili dopo che ho inserito un blocco
 		if(availableTargets.size()>0) {
 			g.drawImage(availableTargets.get(actualTarget).image, availableTargets.get(actualTarget).x, availableTargets.get(actualTarget).y, availableTargets.get(actualTarget).width,  availableTargets.get(actualTarget).height, null);
 			g.drawImage(targetLeftArrow.image, targetLeftArrow.x, targetLeftArrow.y, targetLeftArrow.width, targetLeftArrow.height, null);
 			g.drawImage(targetRightArrow.image, targetRightArrow.x, targetRightArrow.y, targetRightArrow.width, targetRightArrow.height, null);
 		}
-		
-		MyImage grass = null;
-	    grass = new MyImage(d, "Images"+File.separator+"grass.png", 0, 0, 64, 64);
 	    
 		int x = (int) (380*grass.scalex);
 		int y = (int) (70*grass.scaley);
@@ -242,17 +253,18 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		}
 		
 		//disegno il numero di passi attuale
-		int v = logicEditor.steps;
-    	int xk = 0;
-    	if(v==0){
-            g.drawImage(stepsNumbers.get(v).image,(int) ((258 - xk) * grass.scalex),(int) (500 * grass.scaley) ,stepsNumbers.get(0).width, stepsNumbers.get(0).height, null );
+		int number = logicEditor.steps;
+    	int position = 0;
+    	
+    	if(number==0){
+            g.drawImage(stepsNumbers.get(number).image,(int) ((258 - position) * grass.scalex),(int) (500 * grass.scaley) ,stepsNumbers.get(0).width, stepsNumbers.get(0).height, null);
         }
     	else {
-	        while(v > 0){
-	            int k = v % 10;
-	            g.drawImage(stepsNumbers.get(k).image,(int) ((258 - xk) * grass.scalex),(int) (500 * grass.scaley), stepsNumbers.get(0).width, stepsNumbers.get(0).height, null);
-	            v/=10;
-	            xk+=35;
+	        while(number > 0){
+	            int k = number % 10;
+	            g.drawImage(stepsNumbers.get(k).image,(int) ((258 - position) * grass.scalex),(int) (500 * grass.scaley), stepsNumbers.get(0).width, stepsNumbers.get(0).height, null);
+	            number/=10;
+	            position+=(int)(35*grass.scalex);
 	        }
     	}
     	
@@ -267,7 +279,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 	            int k = time % 10;
 	            g.drawImage(stepsNumbers.get(k).image,(int) ((258 - increment) * grass.scalex),(int) (580 * grass.scaley), stepsNumbers.get(0).width, stepsNumbers.get(0).height, null);
 	            time/=10;
-	            increment+=35;
+	            increment+=(int)(35*grass.scalex);
 	        }
     	}
 	}
@@ -335,6 +347,35 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 			click.playSound();
 		}
 		
+		if(x >= undoButton.x && x <= undoButton.x + undoButton.width && y >= undoButton.y && y <= undoButton.y + undoButton.height) {//sono nell'undobutton button
+			click.playSound();
+			switch(logicEditor.undo()) {
+			case -1:
+				availableTargets.remove(availableTargets.size()-1);
+				actualTarget = 0;
+				break;
+			case -2:
+				playerPlaced=false;
+				break;
+			case 0:
+				availableTargets.add(targets.get(0));
+				break;
+			case 1:
+				availableTargets.add(targets.get(1));
+				break;
+			case 2:
+				availableTargets.add(targets.get(2));
+				break;
+			case 3:
+				availableTargets.add(targets.get(3));
+				break;
+			case 4:
+				availableTargets.add(targets.get(4));
+				break;
+			}
+			undo = false;
+		}
+		
 		if(x >= trashButton.x && x <= trashButton.x + trashButton.width && y >= trashButton.y && y <= trashButton.y + trashButton.height) {//sono nel trash button
 			click.playSound();
 			logicEditor.clearMap();
@@ -355,7 +396,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		if(x >= saveButton.x && x <= saveButton.x + saveButton.width && y >= saveButton.y && y <= saveButton.y + saveButton.height) { //sono nel save button
 			click.playSound();
 			if(playerPlaced==false) {
-				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Player non placed!");
+				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Player not placed!");
 			}
 			else if(logicEditor.SaveMap()) {
 				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Map saved!");
@@ -429,6 +470,9 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 				if(mousex>= x + (j*w) && mousex < (x + ((j+1)*w)) && mousey >= y +(i*h) && mousey < y + (i+1)*h){
 					if(logicEditor.matrix[i][j]==0 && drag) { //se non ho gia aggiunto qualcosa
 						logicEditor.matrix[i][j] = actualValue;
+						logicEditor.lastEventI = i;
+						logicEditor.lastEventJ = j;
+						undo = true;
 						if(actualValue>=10 && actualValue<20) {
 							availableTargets.add(targets.get(actualValue-10));	
 							logicEditor.availableTargets++;
@@ -444,7 +488,9 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 								actualTarget=0;
 								logicEditor.availableTargets--;
 							}
-							else logicEditor.matrix[i][j] = 0;
+							else {
+								logicEditor.matrix[i][j] = 0;
+							}
 						}
 				
 					}

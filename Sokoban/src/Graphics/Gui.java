@@ -3,7 +3,6 @@ package Graphics;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -11,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import Sound.SoundEffects;
@@ -21,8 +19,9 @@ import Sound.SoundEffects;
 
 public class Gui extends JPanel implements MouseListener{
 	private static final long serialVersionUID = -4680955221761793446L;
+	
 	public MyImage background = null;
-	public ArrayList<GraphicsButton> buttons= null;
+	public ArrayList<MyButton> buttons= null;
 	private Dimension d = null;
 	SoundEffects click = null;
 	
@@ -42,18 +41,14 @@ public class Gui extends JPanel implements MouseListener{
 			@Override
 			public void keyPressed(KeyEvent e) {}
 		});
+		
 		this.setFocusable(true);
 		setVisible(true);
 		this.d = d;
 		click = new SoundEffects("Sounds"+File.separator+"click1.wav");
-		buttons = new ArrayList<GraphicsButton>();
-		try {
-			Image x = ImageIO.read(new File("Images"+File.separator+"ui.png"));
-			background = new MyImage(d, x, 0, 0, d.width, d.height);
-		}
-		catch (Exception e) {
-			System.out.println("Immagine della gui non trovata");
-		}
+		buttons = new ArrayList<MyButton>();
+		background =new MyImage(d,"Images"+File.separator+"Backgrounds"+File.separator+"ui.png", 0, 0, d.width, d.height);
+		
 		AddButton(600, 430, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"ClassicP.png", "Images"+File.separator+"Buttons"+File.separator+"ClassicU.png");
 		AddButton(600, 510, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"StepsP.png", "Images"+File.separator+"Buttons"+File.separator+"StepsU.png");
 		AddButton(600, 590, 190, 45, "Images"+File.separator+"Buttons"+File.separator+"TimeP.png", "Images"+File.separator+"Buttons"+File.separator+"TimeU.png");
@@ -61,12 +56,12 @@ public class Gui extends JPanel implements MouseListener{
 	}
 	
 	
-	public void AddButton(GraphicsButton b) {
+	public void AddButton(MyButton b) {
 		buttons.add(b);
 	}
 	
 	public void AddButton(int x, int y, int width, int height, String pressed, String unpressed) {
-		GraphicsButton b= new GraphicsButton(d, pressed, unpressed, x, y, width, height);
+		MyButton b= new MyButton(d, pressed, unpressed, x, y, width, height);
 		buttons.add(b);
 	}
 
@@ -117,9 +112,6 @@ public class Gui extends JPanel implements MouseListener{
 		}
 		
 		switch(action) {
-		case -1:
-			System.exit(0);
-			break;
 		case 0:
 			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
 			GameSelection q = new GameSelection(d, 0);

@@ -13,9 +13,11 @@ import Logic.GameManager;
 import Logic.Map;
 import Sound.SoundEffects;
 
+/*pannello contenente un livello*/
+
 public class Level extends JPanel implements KeyListener {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4320181682285658101L;
 	public Map map = null;
 	public GraphicsPlayer player = null;
 	private GameManager gameManager = null;
@@ -45,6 +47,7 @@ public class Level extends JPanel implements KeyListener {
 	
 	
 	public Level(Dimension d, int playerColour, int map, int mode) {
+		super();
 		this.d = d;
 		this.mode = mode;
 		fullTarget = new ArrayList<MyImage>();
@@ -56,47 +59,48 @@ public class Level extends JPanel implements KeyListener {
 		this.map = new Map("map"+map+".txt", mode);  //letture da mappe
 		player = new GraphicsPlayer(playerColour);
 		gameManager = new GameManager(this);
-		try {
-			background = new MyImage(d, "Images"+File.separator+"background.jpg", 0, 0, d.width, d.height);
-			grass = new MyImage(d, "Images"+File.separator+"grass.png", 0, 0, 64, 64); 
-			for(int i = 1; i <= 15; i++) {
-				MyImage t = new MyImage(d, "Images"+File.separator+"Components" + File.separator+i+".png", 0, 0, 64, 64);
-				if(i<=5) {
-					//buchi pieni
-					MyImage x = new MyImage(d, "Images"+File.separator+"Components" + File.separator+"e"+i+".png", 0, 0, 64, 64);
-					fullTarget.add(x);
-					mobileCrates.add(t);
-				}
-				else if (i<=10)
-					staticCrates.add(t);
-				else
-					targets.add(t);
+		grass = new MyImage(d, "Images"+File.separator+"Components"+File.separator+"grass.png", 0, 0, 64, 64); 
+		for(int i = 1; i <= 15; i++) {
+			MyImage t = new MyImage(d, "Images"+File.separator+"Components" + File.separator+i+".png", 0, 0, 64, 64);
+			if(i<=5) {
+				//buchi pieni
+				MyImage x = new MyImage(d, "Images"+File.separator+"Components" + File.separator+"e"+i+".png", 0, 0, 64, 64);
+				fullTarget.add(x);
+				mobileCrates.add(t);
 			}
-		}catch (Exception e) {
-			System.out.println("Errore nel caricamento delle immagini del livello");
+			else if (i<=10)
+				staticCrates.add(t);
+			else
+				targets.add(t);
 		}
-		victory = new MyImage(d, "Images"+File.separator+"LevelCompleted.png", 2, 300, 1366, 154);
-		stepsFinished = new MyImage(d, "Images"+File.separator+"StepsFinished.png", 2, 300, 1366, 155);
-		timeFinished = new MyImage(d, "Images"+File.separator+"TimeFinished.png", 2, 300, 1366, 155);
-		steps = new SoundEffects("Sounds"+File.separator+"steps.wav");
 		
-		if(mode == 1 || mode == 2) {
+		if(mode == 0) {
+			background = new MyImage(d, "Images"+File.separator+"Backgrounds"+File.separator+"CmodeBackground.jpg", 0, 0, d.width, d.height);
+		}
+		else if(mode == 1) {
+			background = new MyImage(d, "Images"+File.separator+"Backgrounds"+File.separator+"SmodeBackground.jpg", 0, 0, d.width, d.height);
+			stepsImage = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Passi.png", 0, 0, 150, 55);
+			slashImage = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Slash.png", 0, 0, 30, 55);
 			numbers = new ArrayList<MyImage>();
 			for(int i = 0; i < 10; i++) {
 				MyImage image = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+""+i+".png", 0, 0, 70, 55);
 				numbers.add(image);
 			}
-				
+			stepsFinished = new MyImage(d, "Images"+File.separator+"StepsFinished.png", 2, 300, 1366, 155);
 		}
-		if(mode == 1) {
-			stepsImage = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Passi.png", 0, 0, 150, 55);
-			slashImage = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Slash.png", 0, 0, 30, 55);
-		}
-		
-		if(mode == 2) {
+		else if (mode == 2) {
+			background = new MyImage(d, "Images"+File.separator+"Backgrounds"+File.separator+"TmodeBackground.jpg", 0, 0, d.width, d.height);
 			timeImage = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Time.png", 0, 0, 150, 55);
+			numbers = new ArrayList<MyImage>();
+			for(int i = 0; i < 10; i++) {
+				MyImage image = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+""+i+".png", 0, 0, 70, 55);
+				numbers.add(image);
+			}
+			timeFinished = new MyImage(d, "Images"+File.separator+"TimeFinished.png", 2, 300, 1366, 155);
 		}
-		
+			
+		victory = new MyImage(d, "Images"+File.separator+"LevelCompleted.png", 2, 300, 1366, 154);
+		steps = new SoundEffects("Sounds"+File.separator+"steps.wav");
 	}
 	
 	
@@ -104,8 +108,7 @@ public class Level extends JPanel implements KeyListener {
 		return mode;
 	}
 	
-	
-	
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -203,24 +206,22 @@ public class Level extends JPanel implements KeyListener {
 		//disegno il player
 		g.drawImage(player.getImgCorrente(),x+(int) (map.player.getX()*grass.scalex) ,y+(int) (map.player.getY()*grass.scaley), w, h, null);
 		
-		//tempo
 		
 	    if(mode == 2) {
+	    	//modalita a tempo
 	    	float scaleX = (float) (d.getWidth() / (float) 1366);
 		    float scaleY = (float) (d.getHeight() / (float) 768);
 			int t = map.totalTime-map.time.getTime();
-			int numberPosition =  (int)(156*scaleX)-35;
-			ArrayList<Integer> o = new ArrayList<Integer>();
+			int xk =  0;
 			while(t > 0){
-				 o.add(t%10);
-				 t/=10;
-			}
-			g.drawImage(timeImage.image, timeImage.x, timeImage.y, timeImage.width, timeImage.height,null);
-	        for(int i = o.size()-1; i>=0; i--) {
-	            g.drawImage(numbers.get(o.get(i)).image,(int) ((numberPosition) * scaleX),(int) (5 * scaleY), numbers.get(0).width, numbers.get(0).height, null);
+	            int k = t % 10;
+	            g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * scaleX),(int) (5 * scaleY), numbers.get(0).width, numbers.get(0).height, null);
 	            t/=10;
-	            numberPosition +=(int)(35*scaleX);
+	            xk+=35*scaleX;
 	        }
+			xk+=85*scaleX;
+			g.drawImage(timeImage.image, (int) ((1300 - xk) * scaleX), (int) (0 * scaleY), timeImage.width, timeImage.height,null);
+	        
 	    }
 	    
 		//disegno il numero di passi
@@ -233,35 +234,34 @@ public class Level extends JPanel implements KeyListener {
 	    	//passi totali
 	        while(v > 0){
 	            int k = v % 10;
-	            g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * scalex),(int) (710 * scaley), numbers.get(0).width, numbers.get(0).height, null);
+	            g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * scalex),(int) (5 * scaley), numbers.get(0).width, numbers.get(0).height, null);
 	            v/=10;
-	            xk+=35;
+	            xk+=(int)(35*scalex);
 	        }
 	        //slash
-	            g.drawImage(slashImage.image,(int) ((1300 - xk + 20) * scalex),(int) (710 * scaley), slashImage.width, slashImage.height, null); //slash
-	            xk+=35;
+	            g.drawImage(slashImage.image,(int) ((1300 - xk + 20) * scalex),(int) (5 * scaley), slashImage.width, slashImage.height, null); //slash
+	            xk+=(int)(35*scalex);
 	        
 	        //passi attuali
 	        v=map.getActualSteps();
 	        if(v==0){
-	            g.drawImage(numbers.get(v).image,(int) ((1300 - xk) * scalex),(int) (710 * scaley) ,numbers.get(0).width, numbers.get(0).height, null );
-	            xk+=35;
+	            g.drawImage(numbers.get(v).image,(int) ((1300 - xk) * scalex),(int) (5 * scaley) ,numbers.get(0).width, numbers.get(0).height, null );
+	            xk+=(int)(35*scalex);
 	        }
 	        else{
 	            while(v > 0){
 	                int k = v % 10;
-	                g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * scalex),(int) (710 * scaley),numbers.get(0).width, numbers.get(0).height, null);
+	                g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * scalex),(int) (5 * scaley),numbers.get(0).width, numbers.get(0).height, null);
 	                v/=10;
-	                xk+=35;
+	                xk+=(int)(35*scalex);
 	            }
 	        }
 	        //steps:
 	        xk+=100;
-	        g.drawImage(stepsImage.image,(int) ((1300 - xk) * scalex),(int) (710 * scaley), stepsImage.width, stepsImage.height,  null);
+	        g.drawImage(stepsImage.image,(int) ((1300 - xk) * scalex),(int) (5 * scaley), stepsImage.width, stepsImage.height,  null);
 		 }
 			
-		//disegnare tempo finito oppure passi superati
-			
+		//disegnare tempo finito oppure passi superati	
 		if(map.isComplete()) {
 			g.drawImage(victory.image, victory.x, victory.y, victory.width, victory.height, null);
 			timer++;
@@ -272,14 +272,14 @@ public class Level extends JPanel implements KeyListener {
 			timer++;
 		}
 		
-		if(map.actualSteps>=map.steps) {
+		if(map.actualSteps>=map.totalSteps) {
 			g.drawImage(stepsFinished.image, stepsFinished.x, stepsFinished.y, stepsFinished.width, stepsFinished.height, null);
 			timer++;
 		}
 			
 		
 		if(timer > 15) {
-			//change panel
+			//gioco finito, torno alla selezione del livello
 			PrincipalFrame k = (PrincipalFrame) this.getTopLevelAncestor();
 			GameSelection q = new GameSelection(d, this.mode);
 			k.setAcutalPane(q);
