@@ -163,7 +163,8 @@ public class GameManager {
 					level.map.incrementActualSteps();
 				}
 			}
-			if(level.map.matrix[i+1][j]>=10 && level.map.matrix[i+1][j]<20 && i+2 >= 0) { //se sta spingendo un blocco mobile
+			
+			if(level.map.matrix[i+1][j]>=10 && level.map.matrix[i+1][j]<20 && i+2 < level.map.rows) { //se sta spingendo un blocco mobile
 				int value = level.map.matrix[i+1][j]; //colore del blocco
 				if(level.map.matrix[i+2][j] == 0) { //se c'è prato sotto
 					level.map.player.MoveDown();

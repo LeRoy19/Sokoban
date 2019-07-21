@@ -32,7 +32,10 @@ public class Level extends JPanel implements KeyListener {
 	MyImage stepsFinished = null;
 	MyImage timeFinished = null;
 	
+	private boolean alreadyPlayed = false;
 	SoundEffects steps = null;
+	SoundEffects win = null;
+	SoundEffects lose = null;
 	int mode;
 	boolean Key=false;
 	int movementRight=0;
@@ -74,6 +77,9 @@ public class Level extends JPanel implements KeyListener {
 				targets.add(t);
 		}
 		
+		victory = new MyImage(d, "Images"+File.separator+"LevelCompleted.png", 2, 300, 1366, 154);
+		steps = new SoundEffects("Sounds"+File.separator+"steps.wav");
+		win = new SoundEffects("Sounds"+File.separator+"win.wav");
 		if(mode == 0) {
 			background = new MyImage(d, "Images"+File.separator+"Backgrounds"+File.separator+"CmodeBackground.jpg", 0, 0, d.width, d.height);
 		}
@@ -87,6 +93,7 @@ public class Level extends JPanel implements KeyListener {
 				numbers.add(image);
 			}
 			stepsFinished = new MyImage(d, "Images"+File.separator+"StepsFinished.png", 2, 300, 1366, 155);
+			lose = new SoundEffects("Sounds"+File.separator+"lose.wav");
 		}
 		else if (mode == 2) {
 			background = new MyImage(d, "Images"+File.separator+"Backgrounds"+File.separator+"TmodeBackground.jpg", 0, 0, d.width, d.height);
@@ -97,10 +104,10 @@ public class Level extends JPanel implements KeyListener {
 				numbers.add(image);
 			}
 			timeFinished = new MyImage(d, "Images"+File.separator+"TimeFinished.png", 2, 300, 1366, 155);
+			lose = new SoundEffects("Sounds"+File.separator+"lose.wav");
 		}
 			
-		victory = new MyImage(d, "Images"+File.separator+"LevelCompleted.png", 2, 300, 1366, 154);
-		steps = new SoundEffects("Sounds"+File.separator+"steps.wav");
+	
 	}
 	
 	
@@ -263,16 +270,28 @@ public class Level extends JPanel implements KeyListener {
 			
 		//disegnare tempo finito oppure passi superati	
 		if(map.isComplete()) {
+			if(!alreadyPlayed) {
+				win.playSound();
+				alreadyPlayed = true;
+			}
 			g.drawImage(victory.image, victory.x, victory.y, victory.width, victory.height, null);
 			timer++;
 		}
 		
 		if(map.time!= null && map.time.getTime()>=map.totalTime) {
+			if(!alreadyPlayed) {
+				lose.playSound();
+				alreadyPlayed = true;
+			}
 			g.drawImage(timeFinished.image, timeFinished.x, timeFinished.y, timeFinished.width, timeFinished.height, null);
 			timer++;
 		}
 		
 		if(map.actualSteps>=map.totalSteps) {
+			if(!alreadyPlayed) {
+				lose.playSound();
+				alreadyPlayed = true;
+			}
 			g.drawImage(stepsFinished.image, stepsFinished.x, stepsFinished.y, stepsFinished.width, stepsFinished.height, null);
 			timer++;
 		}

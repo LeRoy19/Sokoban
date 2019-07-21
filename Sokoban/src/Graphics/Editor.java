@@ -61,6 +61,7 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 	private int actualValue = 0;
 	private boolean drag = false;
 	private int mousex, mousey;
+	@SuppressWarnings("unused")
 	private Dimension d = null;
 	private boolean playerPlaced= false;
 	private boolean undo;
@@ -98,16 +99,16 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		staticCrates = new ArrayList<MyImage>();
 		availableTargets = new ArrayList<MyImage>();
 		stepsNumbers = new ArrayList<MyImage>();
-		SCrateLeftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 100, 168, 40, 30);
-		SCrateRightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 244, 168, 40, 30);
-		MCrateLeftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 100, 288, 40, 30);
-		MCrateRightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 244, 288, 40, 30);
-		targetLeftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 100, 408, 40, 30);
-		targetRightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 244, 408, 40, 30);
-		stepsLeftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 165, 513, 40, 30);
-		stepsRightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 315, 513, 40, 30);
-		timeLeftArrow = new MyImage(d, "Images"+File.separator+"LeftArrow.png", 165, 590, 40, 30);
-		timeRightArrow = new MyImage(d, "Images"+File.separator+"RightArrow.png", 315, 590, 40, 30);
+		SCrateLeftArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"LeftArrow.png", 100, 168, 40, 30);
+		SCrateRightArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"RightArrow.png", 244, 168, 40, 30);
+		MCrateLeftArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"LeftArrow.png", 100, 288, 40, 30);
+		MCrateRightArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"RightArrow.png", 244, 288, 40, 30);
+		targetLeftArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"LeftArrow.png", 100, 408, 40, 30);
+		targetRightArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"RightArrow.png", 244, 408, 40, 30);
+		stepsLeftArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"LeftArrow.png", 165, 513, 40, 30);
+		stepsRightArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"RightArrow.png", 315, 513, 40, 30);
+		timeLeftArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"LeftArrow.png", 165, 590, 40, 30);
+		timeRightArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"RightArrow.png", 315, 590, 40, 30);
 		time = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Time.png", 10, 575, 150, 55);
 		
 		click = new SoundEffects("Sounds"+File.separator+"click1.wav");
@@ -398,11 +399,21 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 			if(playerPlaced==false) {
 				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Player not placed!");
 			}
-			else if(logicEditor.SaveMap()) {
-				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Map saved!");
-			}
 			else {
-				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Map not saved, check targets, steps or time!");
+				switch(logicEditor.SaveMap()) {
+				case 0:
+					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "You can't save more maps!");
+					break;
+				case 1:
+					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Map saved!");
+					break;
+				case -1:
+					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Map not saved, control steps time or targets!");
+					break;
+				case -2:
+					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Error during saving map, map not saved!");
+					break;
+				}
 			}
 		}
 	}

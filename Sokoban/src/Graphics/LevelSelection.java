@@ -38,7 +38,7 @@ public class LevelSelection extends JPanel implements MouseListener{
     	this.setFocusable(true);
     	this.d = d;
     	this.setOpaque(false);
-    	this.setLayout(new FlowLayout(FlowLayout.CENTER, 60, 30));
+    	this.setLayout(new FlowLayout(FlowLayout.CENTER, 60, 60));
     	click = new SoundEffects("Sounds"+File.separator+"click1.wav");
     	maps = new ArrayList<JLabel>();
 		try {

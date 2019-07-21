@@ -23,7 +23,7 @@ public class LogicEditor {
 		matrix = new int[10][14];
 	}
 	
-	public boolean SaveMap() {
+	public int SaveMap() {
 		int map=0;
 		
 		if(availableTargets==0 && steps>0 && time>0) {
@@ -35,48 +35,52 @@ public class LogicEditor {
 					map++;
 				}
 				bIn.close();
-			
-				BufferedWriter bOut = new BufferedWriter(new FileWriter("map"+map+".txt"));
-				//aggiorno il numero di mappe
-				BufferedWriter bOut2 = new BufferedWriter(new FileWriter("NumMaps.txt"));
-				bOut2.append(Integer.toString(map));
-				bOut2.close();
-				
-				//righe e colonne
-				bOut.append("10");
-				bOut.newLine();
-				bOut.append("14");
-				bOut.newLine();
-				bOut.append(Integer.toString(steps));
-				bOut.newLine();
-				bOut.append(Integer.toString(time));
-				bOut.newLine();
-				for (int i = 0; i < 10; i++) {
-					StringBuilder riga = new StringBuilder();
-					for (int j = 0; j < 14; j++) {
-						if(matrix[i][j]==-100) {
-							playerI=i;
-							playerJ=j;
-							matrix[i][j]=0;
-						}
-							riga.append(Integer.toString(matrix[i][j])+" ");
-					}
-					bOut.append(riga.toString());
+				if(map<=20) { //ci sono abbastanza bottoni
+					BufferedWriter bOut = new BufferedWriter(new FileWriter("map"+map+".txt"));
+					//aggiorno il numero di mappe
+					BufferedWriter bOut2 = new BufferedWriter(new FileWriter("NumMaps.txt"));
+					bOut2.append(Integer.toString(map));
+					bOut2.close();
+					
+					//righe e colonne
+					bOut.append("10");
 					bOut.newLine();
+					bOut.append("14");
+					bOut.newLine();
+					bOut.append(Integer.toString(steps));
+					bOut.newLine();
+					bOut.append(Integer.toString(time));
+					bOut.newLine();
+					for (int i = 0; i < 10; i++) {
+						StringBuilder riga = new StringBuilder();
+						for (int j = 0; j < 14; j++) {
+							if(matrix[i][j]==-100) {
+								playerI=i;
+								playerJ=j;
+								matrix[i][j]=0;
+							}
+								riga.append(Integer.toString(matrix[i][j])+" ");
+						}
+						bOut.append(riga.toString());
+						bOut.newLine();
+					}
+					bOut.append(Integer.toString(playerI));
+					bOut.newLine();
+					bOut.append(Integer.toString(playerJ));
+					bOut.newLine();
+					bOut.close();
+					return 1;
 				}
-				bOut.append(Integer.toString(playerI));
-				bOut.newLine();
-				bOut.append(Integer.toString(playerJ));
-				bOut.newLine();
-				bOut.close();
-				return true;
+				else {
+					return 0;
+				}
 				}
 				catch(IOException k) {
 					k.printStackTrace();
-					return false;
+					return -2;
 			}
 		}
-		return false;
+		return -1;
 	}
 	
 	public void clearMap() {
