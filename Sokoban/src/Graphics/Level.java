@@ -216,56 +216,51 @@ public class Level extends JPanel implements KeyListener {
 		
 	    if(mode == 2) {
 	    	//modalita a tempo
-	    	float scaleX = (float) (d.getWidth() / (float) 1366);
-		    float scaleY = (float) (d.getHeight() / (float) 768);
 			int t = map.totalTime-map.time.getTime();
 			int xk =  0;
 			while(t > 0){
 	            int k = t % 10;
-	            g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * scaleX),(int) (5 * scaleY), numbers.get(0).width, numbers.get(0).height, null);
+	            g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * grass.scalex),(int) (5 * grass.scaley), numbers.get(0).width, numbers.get(0).height, null);
 	            t/=10;
-	            xk+=35*scaleX;
+	            xk+=35;
 	        }
-			xk+=85*scaleX;
-			g.drawImage(timeImage.image, (int) ((1300 - xk) * scaleX), (int) (0 * scaleY), timeImage.width, timeImage.height,null);
-	        
+			xk+=85;
+			g.drawImage(timeImage.image, (int) ((1300 - xk) * grass.scalex), (int) (0 * grass.scaley), timeImage.width, timeImage.height,null);     
 	    }
 	    
 		//disegno il numero di passi
 		 if(mode==1){ //sono nella modalità a passi
 			 
-			float scalex = (float) (d.getWidth() / (float) 1366);
-		    float scaley = (float) (d.getHeight() / (float) 768);
 			int v = map.getSteps();
 	    	int xk = 0;
 	    	//passi totali
 	        while(v > 0){
 	            int k = v % 10;
-	            g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * scalex),(int) (5 * scaley), numbers.get(0).width, numbers.get(0).height, null);
+	            g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * grass.scalex),(int) (5 * grass.scaley), numbers.get(0).width, numbers.get(0).height, null);
 	            v/=10;
-	            xk+=(int)(35*scalex);
+	            xk+=35;
 	        }
 	        //slash
-	            g.drawImage(slashImage.image,(int) ((1300 - xk + 20) * scalex),(int) (5 * scaley), slashImage.width, slashImage.height, null); //slash
-	            xk+=(int)(35*scalex);
+	            g.drawImage(slashImage.image,(int) ((1300 - xk + 20) * grass.scalex),(int) (5 * grass.scaley), slashImage.width, slashImage.height, null); //slash
+	            xk+=35;
 	        
 	        //passi attuali
 	        v=map.getActualSteps();
 	        if(v==0){
-	            g.drawImage(numbers.get(v).image,(int) ((1300 - xk) * scalex),(int) (5 * scaley) ,numbers.get(0).width, numbers.get(0).height, null );
-	            xk+=(int)(35*scalex);
+	            g.drawImage(numbers.get(v).image,(int) ((1300 - xk) * grass.scalex),(int) (5 * grass.scaley) ,numbers.get(0).width, numbers.get(0).height, null );
+	            xk+=35;
 	        }
 	        else{
 	            while(v > 0){
 	                int k = v % 10;
-	                g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * scalex),(int) (5 * scaley),numbers.get(0).width, numbers.get(0).height, null);
+	                g.drawImage(numbers.get(k).image,(int) ((1300 - xk) * grass.scalex),(int) (5 * grass.scaley),numbers.get(0).width, numbers.get(0).height, null);
 	                v/=10;
-	                xk+=(int)(35*scalex);
+	                xk+=35;
 	            }
 	        }
 	        //steps:
-	        xk+=100;
-	        g.drawImage(stepsImage.image,(int) ((1300 - xk) * scalex),(int) (5 * scaley), stepsImage.width, stepsImage.height,  null);
+	        xk+=(int)(100*grass.scalex);
+	        g.drawImage(stepsImage.image,(int) ((1300 - xk) * grass.scalex),(int) (5 * grass.scaley), stepsImage.width, stepsImage.height,  null);
 		 }
 			
 		//disegnare tempo finito oppure passi superati	
