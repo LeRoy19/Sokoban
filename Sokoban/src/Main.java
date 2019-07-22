@@ -2,7 +2,7 @@ import java.io.IOException;
 import Logic.Game;
 
 /*
- * aggiungere qualche mappa
+ * SOKOBAN LORENZO GUASTALEGNAME
  */
 
 public class Main {

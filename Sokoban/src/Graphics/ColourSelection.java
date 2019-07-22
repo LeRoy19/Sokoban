@@ -35,7 +35,7 @@ public class ColourSelection extends JPanel implements MouseListener {
 		this.setFocusable(true);
 		currentPlayer = 0;
 		for (int i = 0; i < 4; i++) {
-			players.add(new MyImage(d, "Images"+File.separator+"Players"+File.separator+i+".png", d.width/2-45, 85, 90, 90));
+			players.add(new MyImage(d, "Images"+File.separator+"Players"+File.separator+i+".png", 640, 85, 90, 90));
 		}
 		leftArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"LeftArrow.png", 550, 120, 39, 31);
 		rightArrow = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"RightArrow.png", 780, 120, 39, 31);
