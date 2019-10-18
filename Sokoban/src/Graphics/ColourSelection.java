@@ -21,7 +21,7 @@ public class ColourSelection extends JPanel implements MouseListener {
 	public ArrayList<MyImage> players = null;
 	public MyImage leftArrow = null;
 	public MyImage rightArrow = null;
-	private int currentPlayer = 0;
+	private int currentPlayer = 1;
 	Dimension d = null;
 	SoundEffects click = null;
 	
@@ -33,7 +33,7 @@ public class ColourSelection extends JPanel implements MouseListener {
 		click = new SoundEffects("Sounds"+File.separator+"click1.wav");
 		players = new ArrayList<MyImage>();
 		this.setFocusable(true);
-		currentPlayer = 0;
+		currentPlayer = 1;
 		for (int i = 0; i < 4; i++) {
 			players.add(new MyImage(d, "Images"+File.separator+"Players"+File.separator+i+".png", 640, 85, 90, 90));
 		}

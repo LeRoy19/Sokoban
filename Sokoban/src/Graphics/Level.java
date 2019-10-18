@@ -313,7 +313,7 @@ public class Level extends JPanel implements KeyListener {
 			if(event==KeyEvent.VK_R) {
 				map.reset();
 			}
-			else if(event==KeyEvent.VK_RIGHT&&!Key) {
+			else if(event==KeyEvent.VK_RIGHT && !Key) {
 				Key=true;
 				player.incrementMovement("right");
 				gameManager.goRight();

@@ -68,6 +68,8 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 
 	SoundEffects click = null;
 	
+	private boolean actionDone  = false;
+	
 	public Editor(Dimension d) {
 		this.d = d;
 		this.addMouseMotionListener(this);
@@ -133,9 +135,9 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 			
 			background = new MyImage(d, "Images"+File.separator+"Backgrounds"+File.separator+"editor.jpg", 0 , 0, d.width, d.height);
 			saveButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"save.png", 945, 12, 45, 45);
-			homeButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"home.png", 745, 12, 45, 45);
+			homeButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"home.png", 845, 12, 45, 45);
 			undoButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"undo.png", 645, 12, 48, 45);
-			trashButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"trash.png", 845, 12, 45, 45);
+			trashButton = new MyImage(d, "Images"+File.separator+"Buttons"+File.separator+"trash.png", 745, 12, 45, 45);
 			steps = new MyImage(d, "Images"+File.separator+"Steps"+File.separator+"Passi.png", 10, 500, 150, 55);
 			player = new MyImage(d, "Images"+File.separator+"Player"+File.separator+"D0G.png", 155, 40, 64, 64);
 			grass = new MyImage(d, "Images"+File.separator+"Components"+File.separator+"grass.png", 0, 0, 64, 64);
@@ -380,6 +382,8 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 		if(x >= trashButton.x && x <= trashButton.x + trashButton.width && y >= trashButton.y && y <= trashButton.y + trashButton.height) {//sono nel trash button
 			click.playSound();
 			logicEditor.clearMap();
+			playerPlaced=false;
+			undo = false;
 			availableTargets.clear();
 			actualTarget=0;
 			
@@ -480,28 +484,43 @@ public class Editor extends JPanel implements MouseMotionListener, MouseListener
 			for (int j = 0; j < 14; j++) {
 				if(mousex>= x + (j*w) && mousex < (x + ((j+1)*w)) && mousey >= y +(i*h) && mousey < y + (i+1)*h){
 					if(logicEditor.matrix[i][j]==0 && drag) { //se non ho gia aggiunto qualcosa
-						logicEditor.matrix[i][j] = actualValue;
-						logicEditor.lastEventI = i;
-						logicEditor.lastEventJ = j;
-						undo = true;
+						
+						if(actualValue>=20) actionDone=true;
+						
 						if(actualValue>=10 && actualValue<20) {
 							availableTargets.add(targets.get(actualValue-10));	
 							logicEditor.availableTargets++;
+							actionDone = true;
 						}
 						
-						if(actualValue==-100) {
+						/*if(actualValue==-100 && playerPlaced==true) {
+							logicEditor.matrix[i][j] = 0;
+						}*/
+						
+						else if (actualValue==-100 && playerPlaced==false) {
 							playerPlaced=true;
+							actionDone = true;
 						}
+						
 						
 						if(actualValue<0 && actualValue!=-100) {
 							if(!availableTargets.isEmpty()) {
 								availableTargets.remove(actualTarget);
 								actualTarget=0;
 								logicEditor.availableTargets--;
+								actionDone=true;
 							}
-							else {
+							/*else {
 								logicEditor.matrix[i][j] = 0;
-							}
+							}*/
+						}
+						
+						if(actionDone) {
+							logicEditor.lastEventI = i;
+							logicEditor.lastEventJ = j;
+							undo = true;
+							logicEditor.matrix[i][j] = actualValue;
+							actionDone = false;
 						}
 				
 					}

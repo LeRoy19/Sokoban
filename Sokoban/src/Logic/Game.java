@@ -20,7 +20,7 @@ public class Game implements Runnable {
 		while(true) {
 			frame.getActualPane().repaint();
 			try {
-				Thread.sleep(80);
+				Thread.sleep(150);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
